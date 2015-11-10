@@ -9,7 +9,11 @@ package com.thewalkingdevs.api;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
+import com.thewalkingdevs.api.data.ImmigrateDAO;
 import com.thewalkingdevs.api.model.CityPrices;
+import com.thewalkingdevs.api.model.Places;
+
+import java.util.logging.Logger;
 
 import javax.inject.Named;
 
@@ -27,6 +31,8 @@ import javax.inject.Named;
 )
 public class MyEndpoint {
 
+    private static final Logger LOG = Logger.getLogger(ImmigrateDAO.class.getName());
+
     /**
      * A simple endpoint method that takes a name and says Hi back
      */
@@ -34,8 +40,6 @@ public class MyEndpoint {
     public MyBean sayHi(@Named("name") String name) {
         MyBean response = new MyBean();
         response.setData("Hi, " + name);
-        response.setData("Hi, " + name);
-
         //making a change --Levan
         return response;
     }
@@ -43,6 +47,24 @@ public class MyEndpoint {
     @ApiMethod(name = "getCityPrices")
     public CityPrices getCityPrices(@Named("city") String city) {
         return null;
+    }
+
+    @ApiMethod(name = "getPlaces")
+    public Places getPlaces() {
+
+        //test implemenatation, "location" would be passed as parameter into this method
+        String location = "42.4183333,-71.1066667";
+
+        ImmigrateDAO immigrateDAO = new ImmigrateDAO();
+        String apiResponse = immigrateDAO.getPlaces(location);
+
+        //log response
+        LOG.info(apiResponse);
+
+        Places myPlaces = new Places();
+        myPlaces.setData(apiResponse);
+
+        return myPlaces;
     }
 
 }
