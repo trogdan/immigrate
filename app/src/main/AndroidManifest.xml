@@ -23,6 +23,17 @@
 
         <uses-sdk android:minSdkVersion="10"
             android:targetSdkVersion="22" />
+
+        <activity
+            android:name=".NeighborhoodActivity"
+            android:label="@string/title_activity_neighborhood"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
     </application>
 
 </manifest>
