@@ -11,15 +11,5 @@
 
     <!-- APIs -->
     <string name="google_places_api">***REMOVED***</string>
-    <string name="google_maps_key">***REMOVED***</string>
-    <string name="title_activity_neighborhood">Explore Your Neighborhood</string>
-
-    <string name="tab_title_essentials">Essentials</string>
-    <string name="tab_title_services">Services</string>
-    <string name="tab_title_education">Education</string>
-    <string name="tab_title_transportation">Transportation</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
