@@ -28,8 +28,11 @@ public class EndpointsAsyncTask extends AsyncTask<String, Void, CityPrices> {
             myApiService = builder.build();
         }
 
+        // Get the city info
+        String city = params[0];
+
         try {
-           return myApiService.getCityPrices().execute();
+           return myApiService.getCityPrices(city).execute();
         } catch (Exception e) {}//IOException e) {
            // return e.getMessage();*/
         return null;
