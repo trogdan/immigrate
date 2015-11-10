@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">immigrate</string>
     <string name="action_settings">Settings</string>
+
+    // Apis
+    <string name="numbeo_api_request_url">http://www.numbeo.com/api</string>
+    <string name="numbeo_api_city_prices_endpoint">city_prices?</string>
+    <string name="numbeo_api_key">api_key=</string>
+    <string name="numbeo_api_value">***REMOVED***</string>
+
+
 </resources>
