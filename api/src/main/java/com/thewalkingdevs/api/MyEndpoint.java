@@ -9,6 +9,7 @@ package com.thewalkingdevs.api;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
+import com.thewalkingdevs.api.model.CityPrices;
 
 import javax.inject.Named;
 
@@ -35,6 +36,11 @@ public class MyEndpoint {
         response.setData("Hi, " + name);
 
         return response;
+    }
+
+    @ApiMethod(name = "getCityPrices")
+    public CityPrices getCityPrices(@Named("city") String city) {
+        return null;
     }
 
 }
