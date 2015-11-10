@@ -24,7 +24,7 @@ public class EndpointsAsyncTask extends AsyncTask<String, Void, CityPrices> {
         // core doInBackground code from https://github.com/GoogleCloudPlatform/gradle-appengine-templates/tree/master/HelloEndpoints
         if(myApiService == null) {
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-                   .setRootUrl("http://100.110.139.251:8080/_ah/api/");
+                   .setRootUrl("https://brilliant-brand-112216.appspot.com/_ah/api/");
             myApiService = builder.build();
         }
 
