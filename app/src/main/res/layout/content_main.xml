@@ -30,29 +30,41 @@
 
 
             <AutoCompleteTextView
-            android:id="@+id/autoCompleteTextView"
-            android:layout_width="260dp"
-            android:layout_height="48dp"
+                android:id="@+id/autoCompleteTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:paddingTop="8dp"
                 android:paddingBottom="16dp"
-            android:ems="10"
-            android:hint="@string/search_prompt"
-            android:drawableRight="@drawable/my_location">
-            <requestFocus />
+                android:ems="10"
+                android:hint="@string/search_prompt"
+                android:layout_weight="10"
+                android:maxLines="2"
+                android:lines="2"
+                >
+                <requestFocus />
             </AutoCompleteTextView>
-
-
-        <!--<EditText
-                android:layout_width="200dp"
+            <ImageButton
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/editText"
-                android:drawableRight="@drawable/my_location"/>-->
-
+                android:id="@+id/btnMyLocation"
+                android:src="@drawable/my_location"
+                android:background="@null"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            >
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/go"
-                android:id="@+id/btnMyLocation" />
+                android:id="@+id/btnSubmitLocation"
+                android:layout_gravity="center"
+                />
         </LinearLayout>
     </LinearLayout>
 
