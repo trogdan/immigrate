@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.json.JSONException;
 
 /**
  * API Util for api calls.
@@ -64,7 +65,7 @@ public class ApiUtil {
 
             return toCityPrices(buffer.toString());
         } catch (IOException e) {
-            e.printStackTrace();
+
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
