@@ -45,8 +45,8 @@ public class MyEndpoint {
     }
 
     @ApiMethod(name = "getCityPrices")
-    public CityPrices getCityPrices(@Named("city") String city) {
-        return null;
+    public CityPrices getCityPrices() {
+        return ApiUtil.callApi("Boston");
     }
 
     @ApiMethod(name = "getPlaces")

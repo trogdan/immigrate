@@ -1,6 +1,7 @@
 package com.thewalkingdevs.api.model;
 
-import com.google.appengine.repackaged.org.codehaus.jackson.annotate.JsonProperty;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Data model for Item Price.
