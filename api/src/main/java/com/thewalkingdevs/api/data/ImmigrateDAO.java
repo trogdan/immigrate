@@ -16,7 +16,7 @@ public class ImmigrateDAO {
 
     public ImmigrateDAO(){}
 
-    private String getJSON(String requestUrl){
+    private String getAPIResponse(String requestUrl){
 
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
@@ -79,7 +79,6 @@ public class ImmigrateDAO {
         }
 
         return jsonData;
-
     }
 
     public String getPlaces(String location) {
@@ -91,7 +90,7 @@ public class ImmigrateDAO {
         //following string is for test implemtation purposes, will be updated
         requestUrl.append("&radius=500&types=food&key=***REMOVED***");
 
-        String response = getJSON(requestUrl.toString());
+        String response = getAPIResponse(requestUrl.toString());
         return response;
     }
 

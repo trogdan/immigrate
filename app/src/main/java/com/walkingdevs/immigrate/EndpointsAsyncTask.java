@@ -1,7 +1,6 @@
 package com.walkingdevs.immigrate;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
