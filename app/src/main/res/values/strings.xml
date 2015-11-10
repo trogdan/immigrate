@@ -1,8 +1,4 @@
 <resources>
     <string name="app_name">immigrate</string>
     <string name="action_settings">Settings</string>
-
-    // Apis
-    <string name="numbeo_api_request_url">http://www.numbeo.com/api</string>
-
 </resources>
