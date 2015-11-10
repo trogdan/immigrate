@@ -2,12 +2,14 @@ package com.walkingdevs.immigrate;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.Toast;
@@ -45,6 +47,13 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
 
         autoCompView.setAdapter(new GooglePlacesAutocompleteAdapter(this, R.layout.search_list_item));
         autoCompView.setOnItemClickListener(this);
+
+        Button goButton = (Button) findViewById(R.id.front_go_button);
+        goButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), NeighborhoodActivity.class));
+            }
+        });
     }
 
     public void onItemClick(AdapterView adapterView, View view, int position, long id) {
