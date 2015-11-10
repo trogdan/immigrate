@@ -62,11 +62,9 @@ public class ApiUtil {
                 return null;
             }
 
-            return buffer.toString();
+            return toCityPrices(buffer.toString());
         } catch (IOException e) {
-
-        } catch (JSONException e) {
-            e.printStackTrace();
+            
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
