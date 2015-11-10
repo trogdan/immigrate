@@ -10,6 +10,7 @@ import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.thewalkingdevs.api.data.ImmigrateDAO;
+import com.thewalkingdevs.api.model.CityIndices;
 import com.thewalkingdevs.api.model.CityPrices;
 import com.thewalkingdevs.api.model.Places;
 
@@ -44,15 +45,28 @@ public class MyEndpoint {
         return response;
     }
 
-    @ApiMethod(name = "getCityPrices")
-    public CityPrices getCityPrices() {
-        return ApiUtil.callApi("Boston");
+    @ApiMethod(
+            name = "getCityPrices",
+            path = "cityprices",
+            httpMethod = ApiMethod.HttpMethod.GET
+    )
+    public CityPrices getCityPrices(@Named("city") String city) {
+        return ApiUtil.cityPricesEndpoint(city);
+    }
+
+    @ApiMethod(
+            name = "getCityIndices",
+            path = "cityindices",
+            httpMethod = ApiMethod.HttpMethod.GET
+    )
+    public CityIndices getCityIndices(@Named("city") String city) {
+        return ApiUtil.cityIndicesEndpoint(city);
     }
 
     @ApiMethod(name = "getPlaces")
     public Places getPlaces() {
 
-        //test implemenatation, "location" would be passed as parameter into this method
+        //test implementation, "location" would be passed as parameter into this method
         String location = "42.4183333,-71.1066667";
 
         ImmigrateDAO immigrateDAO = new ImmigrateDAO();
