@@ -1,19 +1,27 @@
 package com.thewalkingdevs.api;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.thewalkingdevs.api.constants.AppConstants;
+import com.thewalkingdevs.api.data.ImmigrateDAO;
+import com.thewalkingdevs.api.model.CityPrices;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import org.json.JSONException;
+
 
 /**
  * API Util for api calls.
  */
 public class ApiUtil {
 
-    public String callApi(String urlStr) {
+    public static CityPrices callApi(String urlStr) {
 
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
@@ -21,10 +29,14 @@ public class ApiUtil {
         BufferedReader reader = null;
 
         try {
-            //URL url = new URL();
+            ImmigrateDAO dao = new ImmigrateDAO();
+            String stem = "/" + AppConstants.NUMBEO_CITY_PRICES_ENDPOINT +
+                    AppConstants.NUMBEO_API_KEY_PREFIX + AppConstants.NUMBEO_API_KEY_VALUE +
+                    "&query=" + urlStr;
+            URL url = new URL(dao.getRequestUrl(AppConstants.NUMBEO_QUERY_BASE, stem).toString());
 
             // Create the request and open the connection
-           // urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 
@@ -50,10 +62,9 @@ public class ApiUtil {
                 return null;
             }
 
-            return buffer.toString();
-        } catch (IOException e) {
+            return toCityPrices(buffer.toString());
 
-        } catch (JSONException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         } finally {
             if (urlConnection != null) {
@@ -68,6 +79,23 @@ public class ApiUtil {
         }
 
         return null;
+    }
+
+    private static CityPrices toCityPrices(String input) {
+        CityPrices cityPrices = null;
+        JsonFactory jsonFactory = new JsonFactory();
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            JsonParser jsonParser = jsonFactory.createJsonParser(input);
+            if (jsonParser.nextToken() == JsonToken.START_OBJECT) {
+                cityPrices = mapper.readValue(jsonParser, CityPrices.class);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return cityPrices;
     }
 
     public String getRequestUrl(String location) {

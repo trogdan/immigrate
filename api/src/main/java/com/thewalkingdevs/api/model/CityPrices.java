@@ -11,7 +11,7 @@ public class CityPrices {
     String currency;
     int monthLastUpdate;
     int contributors;
-    int yearsLastUpdate;
+    int yearLastUpdate;
     List<ItemPrice> prices;
 
     public String getName() {
@@ -46,12 +46,12 @@ public class CityPrices {
         this.contributors = contributors;
     }
 
-    public int getYearsLastUpdate() {
-        return yearsLastUpdate;
+    public int getYearLastUpdate() {
+        return yearLastUpdate;
     }
 
     public void setYearsLastUpdate(int yearsLastUpdate) {
-        this.yearsLastUpdate = yearsLastUpdate;
+        this.yearLastUpdate = yearsLastUpdate;
     }
 
     public List<ItemPrice> getPrices() {

@@ -95,6 +95,14 @@ public class ImmigrateDAO {
         return response;
     }
 
+
+    public StringBuilder getRequestUrl(String base, String stem) {
+        StringBuilder requestUrl = new StringBuilder();
+        requestUrl.append(base);
+        requestUrl.append(stem);
+        return requestUrl;
+    }
+
     private String getQueryParam(String key, String value){
         return "&" + key + "=" + value;
     }
