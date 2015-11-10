@@ -64,7 +64,7 @@ public class ApiUtil {
 
             return toCityPrices(buffer.toString());
         } catch (IOException e) {
-            
+
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
