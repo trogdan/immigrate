@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Created by aevangelista on 15-11-09.
  */
-public class Location {
+public class LocationObj {
 
     String placeId;
     String description;
