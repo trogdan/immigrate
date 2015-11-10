@@ -1,6 +1,13 @@
 package com.walkingdevs.immigrate;
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by aevangelista on 15-11-09.
@@ -24,5 +31,37 @@ public class Utility {
         }
 
         return locationType;
+    }
+
+    public static String convertLatLongToAddress(Context context, double lat, double lon) {
+
+        Geocoder geocoder = new Geocoder(context, Locale.ENGLISH);
+        String myAddress;
+
+        try {
+            List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
+
+            if(addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder();
+                for(int i=0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
+                    if(i == returnedAddress.getMaxAddressLineIndex()) {
+                        strReturnedAddress.append(returnedAddress.getAddressLine(i));
+                    } else {
+                        strReturnedAddress.append(returnedAddress.getAddressLine(i)).append(", ");
+                    }
+
+                }
+                myAddress = strReturnedAddress.toString();
+            }
+            else{
+                myAddress = ("No Address returned!");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            myAddress = "Canont get Address!";
+        }
+
+        return myAddress;
     }
 }
