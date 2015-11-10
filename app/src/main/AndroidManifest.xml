@@ -3,6 +3,7 @@
     package="com.walkingdevs.immigrate" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
 
     <application
         android:allowBackup="true"
@@ -30,6 +31,11 @@
             android:label="@string/title_activity_neighborhood"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
     </application>
 
 </manifest>
