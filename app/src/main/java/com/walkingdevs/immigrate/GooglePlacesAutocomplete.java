@@ -2,6 +2,7 @@ package com.walkingdevs.immigrate;
 
 import android.app.Activity;
 import android.content.Context;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,8 +11,14 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,7 +32,13 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-public class GooglePlacesAutocomplete extends Activity implements AdapterView.OnItemClickListener {
+import static com.walkingdevs.immigrate.Utility.locationType;
+
+public class GooglePlacesAutocomplete extends Activity implements AdapterView.OnItemClickListener, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
+
+    // LogCat tag
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private static final String LOG_TAG = "GPA";
     private static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
@@ -37,24 +50,148 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
 
     private static JSONArray selectedLocation;
 
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
+
+    private Location mLastLocation;
+
+    // Google client to interact with Google API
+    private GoogleApiClient mGoogleApiClient;
+
+    // boolean flag to toggle periodic location updates
+    private boolean mRequestingLocationUpdates = false;
+
+    private LocationRequest mLocationRequest;
+
+    // Location updates intervals in sec
+    private static int UPDATE_INTERVAL = 10000; // 10 sec
+    private static int FATEST_INTERVAL = 5000; // 5 sec
+    private static int DISPLACEMENT = 10; // 10 meters
+
+    AutoCompleteTextView autoCompView;
+
+    ImageButton btnMyLocation;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        AutoCompleteTextView autoCompView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
+        autoCompView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
 
         autoCompView.setAdapter(new GooglePlacesAutocompleteAdapter(this, R.layout.search_list_item));
         autoCompView.setOnItemClickListener(this);
+
+        btnMyLocation = (ImageButton) findViewById(R.id.btnMyLocation);
+
+        // First we need to check availability of play services
+        if (checkPlayServices()) {
+            // Building the GoogleApi client
+            buildGoogleApiClient();
+        }
+
+        // Show location button click listener
+        btnMyLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayLocation();
+            }
+        });
+    }
+
+    /**
+     * Method to display the location on UI
+     * */
+    private void displayLocation() {
+
+        mLastLocation = LocationServices.FusedLocationApi
+                .getLastLocation(mGoogleApiClient);
+
+        if (mLastLocation != null) {
+            double latitude = mLastLocation.getLatitude();
+            double longitude = mLastLocation.getLongitude();
+
+            LocationObj myAddress = Utility.convertLatLongToAddress(this, latitude, longitude);
+
+            autoCompView.setText(myAddress.getDescription());
+            Toast.makeText(getApplicationContext(), Utility.locationType(myAddress.getLocationTerms()) + "", Toast.LENGTH_SHORT).show();
+        } else {
+            autoCompView.setText("(Couldn't get the location. Make sure location is enabled on the device)");
+        }
+    }
+
+    /**
+     * Creating google api client object
+     * */
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API).build();
+    }
+
+    /**
+     * Method to verify google play services on the device
+     * */
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil
+                .isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Toast.makeText(getApplicationContext(),
+                        "This device is not supported.", Toast.LENGTH_LONG)
+                        .show();
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onConnected(Bundle arg0) {
+        // Once connected with google api, get the location
+        //displayLocation();
+    }
+
+    @Override
+    public void onConnectionSuspended(int arg0) {
+        mGoogleApiClient.connect();
+    }
+
+    /**
+     * Google api callback methods
+     */
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = "
+                + result.getErrorCode());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        checkPlayServices();
     }
 
     public void onItemClick(AdapterView adapterView, View view, int position, long id) {
         String str = (String) adapterView.getItemAtPosition(position);
 
         //Create Location Object
-        Location location = new Location();
+        LocationObj locationObj = new LocationObj();
         try {
-            location.setPlaceId(selectedLocation.getJSONObject(position).getString("place_id"));
-            location.setDescription(selectedLocation.getJSONObject(position).getString("description"));
+            locationObj.setPlaceId(selectedLocation.getJSONObject(position).getString("place_id"));
+            locationObj.setDescription(selectedLocation.getJSONObject(position).getString("description"));
 
             JSONArray term_items = selectedLocation.getJSONObject(position).getJSONArray("terms");
             ArrayList<String> location_terms = new ArrayList<String>();
@@ -63,19 +200,19 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
                 location_terms.add(term_items.getJSONObject(i).getString("value"));
             }
 
-            location.setLocationTerms(location_terms);
+            locationObj.setLocationTerms(location_terms);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        printOut(location, str);
+        printOut(locationObj, str);
     }
 
-    public void printOut(Location l, String str) {
+    public void printOut(LocationObj l, String str) {
         System.out.print(l.toString());
         Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, String.valueOf(com.walkingdevs.immigrate.Utility.locationType(l.getLocationTerms())), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, String.valueOf(locationType(l.getLocationTerms())), Toast.LENGTH_SHORT).show();
     }
 
 
@@ -114,7 +251,7 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
 
         try {
             // Create a JSON object hierarchy from the results
-                JSONObject jsonObj = new JSONObject(jsonResults.toString());
+            JSONObject jsonObj = new JSONObject(jsonResults.toString());
 
             JSONArray predsJsonArray = jsonObj.getJSONArray("predictions");
 

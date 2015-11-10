@@ -3,6 +3,7 @@
     package="com.walkingdevs.immigrate" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -22,7 +23,6 @@
 
         <uses-sdk android:minSdkVersion="10"
             android:targetSdkVersion="22" />
-
     </application>
 
 </manifest>

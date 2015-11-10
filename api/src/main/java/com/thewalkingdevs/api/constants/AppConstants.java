@@ -16,9 +16,8 @@ public class AppConstants {
     // Numbeo API
     public static final String NUMBEO_QUERY_BASE = "http://www.numbeo.com/api";
     public static final String NUMBEO_CITY_PRICES_ENDPOINT = "city_prices?";
+    public static final String NUMBEO_INDICES_ENDPOINT = "indices?";
     public static final String NUMBEO_API_KEY_PREFIX = "api_key=";
     public static final String NUMBEO_API_KEY_VALUE = "***REMOVED***";
-
-
 
 }
