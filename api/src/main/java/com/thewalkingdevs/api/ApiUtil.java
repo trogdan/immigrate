@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
 import org.json.JSONException;
 
 /**
@@ -22,11 +21,10 @@ public class ApiUtil {
         BufferedReader reader = null;
 
         try {
-            //Uri builtUri = Uri.parse(urlStr).buildUpon().build();
-            //URL url = new URL(builtUri.toString());
+            //URL url = new URL();
 
-            // Create the request to OpenWeatherMap, and open the connection
-            //urlConnection = (HttpURLConnection) url.openConnection();
+            // Create the request and open the connection
+           // urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 
@@ -70,5 +68,17 @@ public class ApiUtil {
         }
 
         return null;
+    }
+
+    public String getRequestUrl(String location) {
+        StringBuilder requestUrl = new StringBuilder();
+        //requestUrl.append(AppConstants.PLACES_QUERY_BASE);
+        //requestUrl.append(getQueryParam(AppConstants.PLACES_QUERY_LOCATION, location));
+        requestUrl.append("&radius=500&types=food");
+        return requestUrl.toString();
+    }
+
+    private String getQueryParam(String key, String value){
+        return "&" + key + "=" + value;
     }
 }
