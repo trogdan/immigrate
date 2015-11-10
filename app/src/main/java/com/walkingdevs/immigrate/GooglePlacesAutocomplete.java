@@ -19,7 +19,6 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -271,6 +270,7 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
 
         return resultList;
     }
+
 
     class GooglePlacesAutocompleteAdapter extends ArrayAdapter implements Filterable {
         private ArrayList resultList;
