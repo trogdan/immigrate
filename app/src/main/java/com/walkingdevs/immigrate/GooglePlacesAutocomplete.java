@@ -9,9 +9,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -69,7 +69,7 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
 
     AutoCompleteTextView autoCompView;
 
-    Button btnMyocation;
+    ImageButton btnMyLocation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,7 +80,7 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
         autoCompView.setAdapter(new GooglePlacesAutocompleteAdapter(this, R.layout.search_list_item));
         autoCompView.setOnItemClickListener(this);
 
-        btnMyocation = (Button) findViewById(R.id.btnMyLocation);
+        btnMyLocation = (ImageButton) findViewById(R.id.btnMyLocation);
 
         // First we need to check availability of play services
         if (checkPlayServices()) {
@@ -89,7 +89,7 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
         }
 
         // Show location button click listener
-        btnMyocation.setOnClickListener(new View.OnClickListener() {
+        btnMyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 displayLocation();
@@ -109,10 +109,11 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
             double latitude = mLastLocation.getLatitude();
             double longitude = mLastLocation.getLongitude();
 
-            autoCompView.setText(latitude + ", " + longitude);
+            String myAddress = Utility.convertLatLongToAddress(this, latitude, longitude);
+
+            autoCompView.setText(myAddress);
 
         } else {
-
             autoCompView.setText("(Couldn't get the location. Make sure location is enabled on the device)");
         }
     }
@@ -146,6 +147,41 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void onConnected(Bundle arg0) {
+        // Once connected with google api, get the location
+        //displayLocation();
+    }
+
+    @Override
+    public void onConnectionSuspended(int arg0) {
+        mGoogleApiClient.connect();
+    }
+
+    /**
+     * Google api callback methods
+     */
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = "
+                + result.getErrorCode());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        checkPlayServices();
     }
 
     public void onItemClick(AdapterView adapterView, View view, int position, long id) {
@@ -234,42 +270,6 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
         }
 
         return resultList;
-    }
-
-    @Override
-    public void onConnected(Bundle arg0) {
-
-        // Once connected with google api, get the location
-        displayLocation();
-    }
-
-    @Override
-    public void onConnectionSuspended(int arg0) {
-        mGoogleApiClient.connect();
-    }
-
-    /**
-     * Google api callback methods
-     */
-    @Override
-    public void onConnectionFailed(ConnectionResult result) {
-        Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = "
-                + result.getErrorCode());
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.connect();
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        checkPlayServices();
     }
 
     class GooglePlacesAutocompleteAdapter extends ArrayAdapter implements Filterable {
