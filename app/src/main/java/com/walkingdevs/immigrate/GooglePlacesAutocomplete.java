@@ -109,10 +109,10 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
             double latitude = mLastLocation.getLatitude();
             double longitude = mLastLocation.getLongitude();
 
-            String myAddress = Utility.convertLatLongToAddress(this, latitude, longitude);
+            LocationObj myAddress = Utility.convertLatLongToAddress(this, latitude, longitude);
 
-            autoCompView.setText(myAddress);
-
+            autoCompView.setText(myAddress.getDescription());
+            Toast.makeText(getApplicationContext(), Utility.locationType(myAddress.getLocationTerms()) + "", Toast.LENGTH_SHORT).show();
         } else {
             autoCompView.setText("(Couldn't get the location. Make sure location is enabled on the device)");
         }

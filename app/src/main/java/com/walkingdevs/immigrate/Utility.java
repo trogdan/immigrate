@@ -33,10 +33,12 @@ public class Utility {
         return locationType;
     }
 
-    public static String convertLatLongToAddress(Context context, double lat, double lon) {
+    public static LocationObj convertLatLongToAddress(Context context, double lat, double lon) {
 
         Geocoder geocoder = new Geocoder(context, Locale.ENGLISH);
-        String myAddress;
+        String myAddress = null;
+        LocationObj locObj = new LocationObj();
+        ArrayList<String> locationTerms = new ArrayList<String>();
 
         try {
             List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
@@ -45,14 +47,23 @@ public class Utility {
                 Address returnedAddress = addresses.get(0);
                 StringBuilder strReturnedAddress = new StringBuilder();
                 for(int i=0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
+                    String[] commaSplit = null;
+                    if(returnedAddress.getAddressLine(i).contains(",")) {
+                        commaSplit = returnedAddress.getAddressLine(i).split(",");
+                        for(int x = 0; x < commaSplit.length; x++) {
+                            strReturnedAddress.append(commaSplit[x]).append(", ");
+                            locationTerms.add(commaSplit[x]);
+                        }
+                    }
                     if(i == returnedAddress.getMaxAddressLineIndex()) {
                         strReturnedAddress.append(returnedAddress.getAddressLine(i));
-                    } else {
+                        myAddress = strReturnedAddress.toString();
+                    } else if (commaSplit == null) {
                         strReturnedAddress.append(returnedAddress.getAddressLine(i)).append(", ");
+                        myAddress = strReturnedAddress.toString();
                     }
-
+                    locationTerms.add(returnedAddress.getAddressLine(i));
                 }
-                myAddress = strReturnedAddress.toString();
             }
             else{
                 myAddress = ("No Address returned!");
@@ -62,6 +73,9 @@ public class Utility {
             myAddress = "Canont get Address!";
         }
 
-        return myAddress;
+        locObj.setDescription(myAddress);
+        locObj.setLocationTerms(locationTerms);
+
+        return locObj;
     }
 }
