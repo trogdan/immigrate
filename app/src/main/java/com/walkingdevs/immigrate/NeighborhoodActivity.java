@@ -1,5 +1,6 @@
 package com.walkingdevs.immigrate;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -10,6 +11,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -17,13 +19,23 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.thewalkingdevs.api.myApi.MyApi;
 import com.thewalkingdevs.api.myApi.model.Places;
+import com.thewalkingdevs.api.myApi.model.PlacesBag;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NeighborhoodActivity extends AppCompatActivity implements OnMapReadyCallback  {
 
-    private static final int NUM_PAGES = 4;
+    private static final int NUM_PAGES = 3;
+    private static MyApi myApiService;
+    private PlacesAsyncTask mPlacesTask;
+    private LocationObj mCurrentLocation;
+    private PlacesBag mLatestPlaces;
+    private ArrayList<NeighborhoodSliderFragment> mCurrentFragments;
 
     /**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
@@ -35,8 +47,6 @@ public class NeighborhoodActivity extends AppCompatActivity implements OnMapRead
      * The pager adapter, which provides the pages to the view pager widget.
      */
     private PagerAdapter mPagerAdapter;
-
-    private Places mLatestPlaces;
 
     private static String[] mPageTitles;
 
@@ -50,7 +60,6 @@ public class NeighborhoodActivity extends AppCompatActivity implements OnMapRead
         mPageTitles = new String[] {
                 getResources().getString(R.string.tab_title_services),
                 getResources().getString(R.string.tab_title_essentials),
-                getResources().getString(R.string.tab_title_education),
                 getResources().getString(R.string.tab_title_transportation)
         };
 
@@ -58,10 +67,23 @@ public class NeighborhoodActivity extends AppCompatActivity implements OnMapRead
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        mCurrentLocation = MyApp.getInstance().getLocation();
+
+
+        mCurrentFragments = new ArrayList<>();
+        mCurrentFragments.add(new NeighborhoodSliderFragment());
+        mCurrentFragments.add(new NeighborhoodSliderFragment());
+        mCurrentFragments.add(new NeighborhoodSliderFragment());
+
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) findViewById(R.id.neighborhood_pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
+        mPager.setOffscreenPageLimit(NUM_PAGES);
+
+        mPlacesTask = new PlacesAsyncTask();
+        mPlacesTask.execute(mCurrentLocation.getLatitudes() + "," + mCurrentLocation.getLongitude());
+
     }
 
     @Override
@@ -87,7 +109,7 @@ public class NeighborhoodActivity extends AppCompatActivity implements OnMapRead
     }
 
     /**
-     * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
+     * A simple pager adapter that represents 3 ScreenSlidePageFragment objects, in
      * sequence.
      */
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
@@ -97,11 +119,19 @@ public class NeighborhoodActivity extends AppCompatActivity implements OnMapRead
 
         @Override
         public Fragment getItem(int position) {
-            NeighborhoodSliderFragment fragment = new NeighborhoodSliderFragment();
-            mLatestPlaces = fragment.getPlaces();
+
+            if(mLatestPlaces != null) {
+                if (position == 0) {
+                    mCurrentFragments.get(position).setLatestPlaces(mLatestPlaces.getServices());
+                } else if (position == 1) {
+                    mCurrentFragments.get(position).setLatestPlaces(mLatestPlaces.getEssentials());
+                } else if (position == 2) {
+                    mCurrentFragments.get(position).setLatestPlaces(mLatestPlaces.getTransportation());
+                }
+            }
 
             //Draw here?
-            return fragment;
+            return mCurrentFragments.get(position);
         }
 
         @Override
@@ -115,6 +145,56 @@ public class NeighborhoodActivity extends AppCompatActivity implements OnMapRead
                 return "";
             else
                 return mPageTitles[position];
+        }
+    }
+
+    /**
+     * Async Task for Endpoints.
+     */
+    public class PlacesAsyncTask extends AsyncTask<String, Void, PlacesBag> {
+        private final String LOG_TAG = EndpointsAsyncTask.class.getSimpleName();
+
+        @Override
+        protected PlacesBag doInBackground(String... params) {
+
+            // core doInBackground code from https://github.com/GoogleCloudPlatform/gradle-appengine-templates/tree/master/HelloEndpoints
+            if(myApiService == null) {
+                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                        .setRootUrl("https://brilliant-brand-112216.appspot.com/_ah/api/");
+                myApiService = builder.build();
+            }
+
+            String location = params[0];
+            try {
+                return myApiService.getPlacesBag(location).execute();
+
+            } catch (Exception e) {
+
+                Log.e(LOG_TAG, "Error getting api service places");
+                Log.e(LOG_TAG, e.getMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(PlacesBag places) {
+            super.onPostExecute(places);
+
+            if(places != null) {
+                mLatestPlaces = places;
+                for(int i = 0; i < NUM_PAGES; i++)
+                {
+                    if (i == 0) {
+                        mCurrentFragments.get(i).setLatestPlaces(mLatestPlaces.getServices());
+                    } else if (i == 1) {
+                        mCurrentFragments.get(i).setLatestPlaces(mLatestPlaces.getEssentials());
+                    } else if (i == 2) {
+                        mCurrentFragments.get(i).setLatestPlaces(mLatestPlaces.getTransportation());
+                    }
+                }
+
+            }
+
         }
     }
 }

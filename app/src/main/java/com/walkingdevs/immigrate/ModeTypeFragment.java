@@ -32,7 +32,7 @@ public class ModeTypeFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_mode_type, container, false);
 
         // TODO populate cards and pull from numbeo
-        LocationObj currentLocation = MyApp.getLocation();
+        LocationObj currentLocation = MyApp.getInstance().getLocation();
 
         CardView cityCard = (CardView) rootView.findViewById(R.id.mode_card_city);
         cityCard.setOnClickListener(new View.OnClickListener() {
