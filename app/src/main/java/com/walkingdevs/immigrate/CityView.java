@@ -1,13 +1,17 @@
 package com.walkingdevs.immigrate;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 public class CityView extends AppCompatActivity {
+
+    private String mCompareInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,26 @@ public class CityView extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    public void onCompareClick(View view){
+
+        if(MyApp.mCurrentLocation != null && MyApp.mCurrentLocation.getCity() != null) {
+
+            String currentCity = MyApp.mCurrentLocation.getCity();
+            String compareToCity = mCompareInput;
+
+            Intent intent = new Intent(this, CityViewFragment.class);
+            intent.putExtra("currentCity", currentCity);
+            intent.putExtra("compareToCity", compareToCity);
+            startActivity(intent);
+        }
+
+        Log.d("LOG_TAG", mCompareInput);
+    }
+
+    public void updateInput(String compareInput){
+        mCompareInput = compareInput;
     }
 
 }

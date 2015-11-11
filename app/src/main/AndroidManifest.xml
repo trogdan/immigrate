@@ -18,6 +18,7 @@
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -31,7 +32,6 @@
             android:label="@string/title_activity_city_view"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
-
         <activity
             android:name=".NeighborhoodActivity"
             android:label="@string/title_activity_neighborhood"
@@ -46,6 +46,10 @@
             android:name=".ModeTypeActivity"
             android:label="@string/title_activity_mode_type"
             android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".CompareActivity"
+            android:label="@string/title_activity_compare" >
         </activity>
     </application>
 
