@@ -14,8 +14,8 @@ public class CityHealthCareInfo {
     @JsonProperty("cost")
     private double healthCareCost;
     @JsonProperty("responsiveness_waitings")
-    private double responsivenessIndex;
-    @JsonProperty("index_healthCare")
+    private double responsivenessIndex;git
+    @JsonProperty("index_healthcare")
     private double healthCareIndex;
     @JsonProperty("speed")
     private double speedIndex;
