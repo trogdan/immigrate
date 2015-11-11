@@ -26,6 +26,12 @@
             android:targetSdkVersion="22" />
 
         <activity
+            android:name=".CityView"
+            android:label="@string/title_activity_city_view"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+
+        <activity
             android:name=".NeighborhoodActivity"
             android:label="@string/title_activity_neighborhood"
             android:theme="@style/AppTheme.NoActionBar" >

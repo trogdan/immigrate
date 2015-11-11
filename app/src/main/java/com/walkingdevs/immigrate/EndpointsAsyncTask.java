@@ -6,7 +6,9 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.thewalkingdevs.api.myApi.MyApi;
 import com.thewalkingdevs.api.myApi.model.CityPrices;
+import com.thewalkingdevs.api.myApi.model.ItemPrice;
 
+import java.util.List;
 
 
 /**
@@ -37,4 +39,12 @@ public class EndpointsAsyncTask extends AsyncTask<String, Void, CityPrices> {
         return null;
     }
 
+    @Override
+    protected void onPostExecute(CityPrices cityPrices) {
+        super.onPostExecute(cityPrices);
+
+        List<ItemPrice> prices = cityPrices.getPrices();
+
+        System.out.print(prices);
+    }
 }
