@@ -1,26 +1,25 @@
 package com.walkingdevs.immigrate;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.thewalkingdevs.api.myApi.MyApi;
+import com.thewalkingdevs.api.myApi.model.CityBag;
 import com.thewalkingdevs.api.myApi.model.CityPrices;
 import com.thewalkingdevs.api.myApi.model.ItemPrice;
-
-import java.util.List;
-
 
 /**
  * Async Task for Endpoints.
  */
-public class EndpointsAsyncTask extends AsyncTask<String, Void, CityPrices> {
+public class EndpointsAsyncTask extends AsyncTask<String, Void, CityBag> {
 
     private static MyApi myApiService = null;
     private static final String LOG_TAG = EndpointsAsyncTask.class.getSimpleName();
 
     @Override
-    protected CityPrices doInBackground(String... params) {
+    protected CityBag doInBackground(String... params) {
 
         // core doInBackground code from https://github.com/GoogleCloudPlatform/gradle-appengine-templates/tree/master/HelloEndpoints
         if(myApiService == null) {
@@ -33,7 +32,7 @@ public class EndpointsAsyncTask extends AsyncTask<String, Void, CityPrices> {
         String city = params[0];
 
         try {
-           return myApiService.getCityPrices(city).execute();
+           return myApiService.getCityBag(city).execute();
         } catch (Exception e) {}//IOException e) {
            // return e.getMessage();*/
         return null;

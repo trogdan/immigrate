@@ -7,10 +7,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thewalkingdevs.api.constants.AppConstants;
 import com.thewalkingdevs.api.constants.AppConstantsPrivate;
 import com.thewalkingdevs.api.data.ImmigrateDAO;
+import com.thewalkingdevs.api.model.CityBag;
+import com.thewalkingdevs.api.model.CityCrime;
+import com.thewalkingdevs.api.model.CityCrimeSkinny;
+import com.thewalkingdevs.api.model.CityHealthCareInfo;
+import com.thewalkingdevs.api.model.CityHealthCareInfoSkinny;
 import com.thewalkingdevs.api.model.CityIndices;
 import com.thewalkingdevs.api.model.CityPrices;
 import com.thewalkingdevs.api.model.Places;
 import com.thewalkingdevs.api.model.Place;
+import com.thewalkingdevs.api.model.CityPricesSkinny;
+import com.thewalkingdevs.api.model.ItemPrice;
+import com.thewalkingdevs.api.model.ItemPriceSkinny;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,6 +29,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * API Util for api calls.
@@ -252,5 +262,106 @@ public final class ApiUtil {
 
         String json = callAPI(DAO.getRequestUrl(AppConstants.NUMBEO_QUERY_BASE, stem).toString());
         return convert(json, CityPrices.class);
+    }
+
+    /**
+     * Returns the city healthcare data from numbeo.
+     * @param city the city to use
+     * @return {@link CityPrices}
+     */
+    public static CityHealthCareInfo cityHealthCareInfoEndpoint(String city) {
+        String stem = "/" + AppConstants.NUMBEO_CITY_HEALTHCARE_ENDPOINT +
+                AppConstants.NUMBEO_API_KEY_PREFIX + AppConstants.NUMBEO_API_KEY_VALUE +
+                "&query=" + city;
+
+        String json = callAPI(DAO.getRequestUrl(AppConstants.NUMBEO_QUERY_BASE, stem).toString());
+        return convert(json, CityHealthCareInfo.class);
+    }
+
+    /**
+     * Returns the city crime data from numbeo.
+     * @param city the city to use
+     * @return {@link CityPrices}
+     */
+    public static CityCrime cityCrimeEndpoint(String city) {
+        String stem = "/" + AppConstants.NUMBEO_CITY_CRIME_ENDPOINT +
+                AppConstants.NUMBEO_API_KEY_PREFIX + AppConstants.NUMBEO_API_KEY_VALUE +
+                "&query=" + city;
+
+        String json = callAPI(DAO.getRequestUrl(AppConstants.NUMBEO_QUERY_BASE, stem).toString());
+        return convert(json, CityCrime.class);
+    }
+
+    /**
+     * Returns a city bag with all the relevant city data.
+     * @param city the city to use
+     * @return an instance of {@link CityBag}
+     */
+    public static CityBag cityBagEndpoint(String city) {
+        CityBag cityBag = new CityBag();
+
+        cityBag.setCityPrices(toCityPricesSkinny(cityPricesEndpoint(city)));
+        cityBag.setCityCrime(toCityCrime(cityCrimeEndpoint(city)));
+        cityBag.setCityHealthCareInfo(toHealthCareInfo(cityHealthCareInfoEndpoint(city)));
+
+        return cityBag;
+    }
+
+    private static CityHealthCareInfoSkinny toHealthCareInfo(CityHealthCareInfo cityHealthCareInfo) {
+        CityHealthCareInfoSkinny healthCareInfoSkinny = new CityHealthCareInfoSkinny();
+
+        healthCareInfoSkinny.setAccuracyIndex(cityHealthCareInfo.getAccuracyIndex());
+        healthCareInfoSkinny.setFriendlinessIndex(cityHealthCareInfo.getFriendlinessIndex());
+        healthCareInfoSkinny.setHealthCareCost(cityHealthCareInfo.getHealthCareCost());
+        healthCareInfoSkinny.setHealthCareStaffCompetency(cityHealthCareInfo.getHealthCareStaffCompetency());
+        healthCareInfoSkinny.setResponsivenessIndex(cityHealthCareInfo.getResponsivenessIndex());
+        healthCareInfoSkinny.setSpeedIndex(cityHealthCareInfo.getSpeedIndex());
+        healthCareInfoSkinny.setModernEquipmentIndex(cityHealthCareInfo.getModernEquipmentIndex());
+
+        return healthCareInfoSkinny;
+    }
+
+    private static CityCrimeSkinny toCityCrime(CityCrime cityCrime) {
+        CityCrimeSkinny crimeSkinny = new CityCrimeSkinny();
+
+        crimeSkinny.setCorruptionIndex(cityCrime.getCorruptionIndex());
+        crimeSkinny.setCrimeLevel(cityCrime.getCrimeLevel());
+        crimeSkinny.setViolentCrimeIndex(cityCrime.getViolentCrimeIndex());
+        crimeSkinny.setDrugCrimeIndex(cityCrime.getDrugCrimeIndex());
+        crimeSkinny.setDaylightSafetyIndex(cityCrime.getDaylightSafetyIndex());
+        crimeSkinny.setNightSafetyIndex(cityCrime.getNightSafetyIndex());
+        crimeSkinny.setDiversityThreatIndex(cityCrime.getDiversityThreatIndex());
+
+        return crimeSkinny;
+    }
+
+    private static CityPricesSkinny toCityPricesSkinny(CityPrices cityPrices) {
+        CityPricesSkinny nonfat = new CityPricesSkinny();
+        nonfat.setCurrency(cityPrices.getCurrency());
+
+        Integer[] idsOfInterest = new Integer[]{1, 9, 11, 13, 24, 26, 28};
+        List<Integer> idsList = Arrays.asList(idsOfInterest);
+
+        List<ItemPriceSkinny> itemPricesSkinny = new ArrayList<ItemPriceSkinny>();
+
+        for (ItemPrice item : cityPrices.getPrices()) {
+            ItemPriceSkinny nonfatItem = new ItemPriceSkinny();
+            if (idOfInterest(item.getItemId())) {
+                nonfatItem.setItemName(item.getItemName());
+                nonfatItem.setLowestPrice(item.getLowestPrice());
+                nonfatItem.setItemId(item.getItemId());
+                nonfatItem.setHighestPrice(item.getHighestPrice());
+                itemPricesSkinny.add(nonfatItem);
+            }
+        }
+
+        nonfat.setPrices(itemPricesSkinny);
+
+        return nonfat;
+    }
+
+    private static boolean idOfInterest(int itemId) {
+        return itemId == 1 || itemId == 9 || itemId == 11 || itemId == 13 || itemId == 24 ||
+                itemId == 26 || itemId == 28;
     }
 }
