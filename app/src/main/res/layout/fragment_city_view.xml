@@ -10,6 +10,36 @@
     tools:context="com.walkingdevs.immigrate.CityViewFragment"
     android:orientation="vertical"
     >
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:layout_width="match_parent"
+        android:id="@+id/eancontainer"
+        android:layout_height="wrap_content"
+        >
+
+        <EditText
+            android:layout_weight="5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="textNoSuggestions"
+            android:imeOptions="flagNoExtractUi"
+            android:id="@+id/compareinput"
+            android:saveEnabled="true"
+            android:maxLines="1"
+            />
+
+        <Button
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Compare"
+            android:id="@+id/add_button"
+            android:onClick="onCompareClick"/>
+
+    </LinearLayout>
+
     <android.support.v7.widget.CardView
         android:id="@+id/mode_card_city"
         android:layout_width="fill_parent"
