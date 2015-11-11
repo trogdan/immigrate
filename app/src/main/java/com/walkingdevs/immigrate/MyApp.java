@@ -3,6 +3,8 @@ package com.walkingdevs.immigrate;
 import android.app.Application;
 import android.content.Context;
 
+import com.thewalkingdevs.api.myApi.model.PlacesBag;
+
 /**
  * Created by dan on 10/26/15.
  */
@@ -11,6 +13,7 @@ public class MyApp extends Application {
     private static MyApp mInstance;
     private static Context context;
     public static LocationObj mCurrentLocation;
+    public static PlacesBag mCurrentPlacesBag;
 
     public static MyApp getInstance() {
         return mInstance;

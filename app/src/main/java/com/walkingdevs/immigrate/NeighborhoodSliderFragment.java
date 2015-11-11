@@ -1,11 +1,9 @@
 package com.walkingdevs.immigrate;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.thewalkingdevs.api.myApi.MyApi;
 import com.thewalkingdevs.api.myApi.model.Places;
 import com.thewalkingdevs.api.myApi.model.Place;
 
@@ -25,11 +20,8 @@ import java.util.List;
 
 public class NeighborhoodSliderFragment extends Fragment {
 
-    private static MyApi myApiService = null;
-
     private Places mLatestPlaces;
-    private LocationObj mCurrentLocation;
-    private PlacesAsyncTask mPlacesTask;
+
     private ListView mListView;
     private PlaceAdapter mPlacesAdapter;
 
@@ -52,58 +44,17 @@ public class NeighborhoodSliderFragment extends Fragment {
         mListView = (ListView) rootView.findViewById(R.id.sliderListView);
         mListView.setAdapter(mPlacesAdapter);
 
-        mCurrentLocation = MyApp.getInstance().getLocation();
-        mPlacesTask = new PlacesAsyncTask();
-        mPlacesTask.execute(mCurrentLocation.getLatitudes() + "," + mCurrentLocation.getLongitude());
-
-
         return rootView;
     }
 
-    public Places getPlaces()
+    public void setLatestPlaces(Places places)
     {
-        return mLatestPlaces;
-    }
-
-    /**
-     * Async Task for Endpoints.
-     */
-    public class PlacesAsyncTask extends AsyncTask<String, Void, Places> {
-        private final String LOG_TAG = EndpointsAsyncTask.class.getSimpleName();
-
-        @Override
-        protected Places doInBackground(String... params) {
-
-            // core doInBackground code from https://github.com/GoogleCloudPlatform/gradle-appengine-templates/tree/master/HelloEndpoints
-            if(myApiService == null) {
-                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-                        .setRootUrl("https://brilliant-brand-112216.appspot.com/_ah/api/");
-                myApiService = builder.build();
-            }
-
-            String location = params[0];
-            try {
-                return myApiService.getPlaces(location).execute();
-            } catch (Exception e) {
-
-                Log.e(LOG_TAG, "Error getting api service places");
-                Log.e(LOG_TAG, e.getMessage());
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Places places) {
-            super.onPostExecute(places);
-
-            List<Place> placeList = places.getResults();
-
-            mPlacesAdapter.clear();
-            for (int i = 0; i < placeList.size(); i++) {
-                mPlacesAdapter.add(placeList.get(i));
-            }
-
-            mLatestPlaces = places;
+        mLatestPlaces = places;
+        mPlacesAdapter.clear();
+        for(int i = 0; i < mLatestPlaces.getResults().size(); i++)
+        {
+            Place place = mLatestPlaces.getResults().get(i);
+            mPlacesAdapter.add(place);
         }
     }
 
@@ -113,7 +64,7 @@ public class NeighborhoodSliderFragment extends Fragment {
     public class PlaceAdapter extends ArrayAdapter<Place> {
 
         private ViewHolder views;
-        public PlaceAdapter(Context context, ArrayList<Place> places) {
+        public PlaceAdapter(Context context, List<Place> places) {
             super(context, 0, places);
         }
 
@@ -127,8 +78,10 @@ public class NeighborhoodSliderFragment extends Fragment {
                 views = new ViewHolder();
                 views.placeNameText = (TextView)convertView.findViewById(R.id.item_place_name_text);
             }
-            views.placeNameText.setText(place.getName());
-
+            if(place != null) {
+                String name = place.getName();
+                views.placeNameText.setText(name);
+            }
             // Return the completed view to render on screen
             return convertView;
         }

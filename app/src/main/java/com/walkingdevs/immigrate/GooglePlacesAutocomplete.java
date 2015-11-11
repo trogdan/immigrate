@@ -3,6 +3,8 @@ package com.walkingdevs.immigrate;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,6 +35,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class GooglePlacesAutocomplete extends Activity implements AdapterView.OnItemClickListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
@@ -240,6 +244,20 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
         }
 
         mApp.mCurrentLocation = myAddress;
+        Geocoder geocoder = new Geocoder(context, Locale.ENGLISH);
+        try {
+            List<Address> addresses = geocoder.getFromLocationName(myAddress.getDescription(), 1);
+            if(addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                String city = returnedAddress.getLocality();
+                MyApp.mCurrentLocation.setLatitudes(returnedAddress.getLatitude());
+                MyApp.mCurrentLocation.setLongitude(returnedAddress.getLongitude());
+                MyApp.mCurrentLocation.setCity(city);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         printOut(myAddress, str);
     }
 
