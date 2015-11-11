@@ -1,6 +1,7 @@
 package com.walkingdevs.immigrate;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -9,12 +10,6 @@ import com.thewalkingdevs.api.myApi.model.CityBag;
 import com.thewalkingdevs.api.myApi.model.CityPrices;
 import com.thewalkingdevs.api.myApi.model.ItemPrice;
 
-<<<<<<< HEAD
-import java.util.List;
-
-
-=======
->>>>>>> Commit with city bag functionality
 /**
  * Async Task for Endpoints.
  */
