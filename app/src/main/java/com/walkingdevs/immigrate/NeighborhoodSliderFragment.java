@@ -109,6 +109,4 @@ public class NeighborhoodSliderFragment extends Fragment {
             return convertView;
         }
     }
-
-
 }

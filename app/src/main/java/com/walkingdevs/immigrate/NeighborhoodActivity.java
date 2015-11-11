@@ -2,17 +2,16 @@ package com.walkingdevs.immigrate;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
+import android.view.MenuItem;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -22,11 +21,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.thewalkingdevs.api.myApi.MyApi;
-import com.thewalkingdevs.api.myApi.model.Places;
 import com.thewalkingdevs.api.myApi.model.PlacesBag;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class NeighborhoodActivity extends AppCompatActivity implements OnMapReadyCallback  {
 
@@ -56,6 +53,7 @@ public class NeighborhoodActivity extends AppCompatActivity implements OnMapRead
         setContentView(R.layout.activity_neighborhood);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mPageTitles = new String[] {
                 getResources().getString(R.string.tab_title_services),
@@ -84,6 +82,17 @@ public class NeighborhoodActivity extends AppCompatActivity implements OnMapRead
         mPlacesTask = new PlacesAsyncTask();
         mPlacesTask.execute(mCurrentLocation.getLatitudes() + "," + mCurrentLocation.getLongitude());
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
