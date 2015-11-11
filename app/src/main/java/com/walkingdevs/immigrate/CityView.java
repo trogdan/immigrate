@@ -16,14 +16,8 @@ public class CityView extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Bundle extras = getIntent().getExtras();
-        String city = extras.getString(GooglePlacesAutocomplete.CITY_STRING);
-
-        Bundle data = new Bundle();
-        data.putString(GooglePlacesAutocomplete.CITY_STRING, city);
-
         CityViewFragment cvf = new CityViewFragment();
-        cvf.setArguments(data);
+        //cvf.setArguments(data);
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()

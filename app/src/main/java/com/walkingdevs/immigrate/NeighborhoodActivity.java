@@ -17,6 +17,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.thewalkingdevs.api.myApi.model.Places;
 
 import java.util.List;
 
@@ -35,8 +36,7 @@ public class NeighborhoodActivity extends AppCompatActivity implements OnMapRead
      */
     private PagerAdapter mPagerAdapter;
 
-    private List<LocationObj> mCurrentLocations;
-
+    private Places mLatestPlaces;
 
     private static String[] mPageTitles;
 
@@ -98,7 +98,7 @@ public class NeighborhoodActivity extends AppCompatActivity implements OnMapRead
         @Override
         public Fragment getItem(int position) {
             NeighborhoodSliderFragment fragment = new NeighborhoodSliderFragment();
-            mCurrentLocations = fragment.getLocations();
+            mLatestPlaces = fragment.getPlaces();
 
             //Draw here?
             return fragment;

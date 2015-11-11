@@ -4,7 +4,15 @@
     tools:context="com.walkingdevs.immigrate.NeighborhoodSliderFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sliderListView"
+        android:layout_gravity="center_horizontal|top"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp" />
 
 </FrameLayout>

@@ -25,11 +25,6 @@ public class CityViewFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Bundle extras = getArguments();
-        String city = extras.getString(GooglePlacesAutocomplete.CITY_STRING);
 
-        if(city != null) {
-            new EndpointsAsyncTask().execute(city);
-        }
     }
 }
