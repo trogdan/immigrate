@@ -1,14 +1,11 @@
 package com.walkingdevs.immigrate;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.thewalkingdevs.api.myApi.MyApi;
 import com.thewalkingdevs.api.myApi.model.CityBag;
-import com.thewalkingdevs.api.myApi.model.CityPrices;
-import com.thewalkingdevs.api.myApi.model.ItemPrice;
 
 /**
  * Async Task for Endpoints.
@@ -41,5 +38,8 @@ public class EndpointsAsyncTask extends AsyncTask<String, Void, CityBag> {
     @Override
     protected void onPostExecute(CityBag cityBag) {
         super.onPostExecute(cityBag);
+
+        String test = cityBag.getCityCrime().getCrimeLevel().toString();
+        String tes2 = "test";
     }
 }

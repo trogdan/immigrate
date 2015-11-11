@@ -83,6 +83,8 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
 
     LocationObj myAddress;
 
+    MyApp mApp;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,12 +96,14 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
 
         context = this;
 
+        mApp.getInstance();
+
         Button button = (Button) findViewById(R.id.go_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (location != null) {
-                    MyApp.setLocation(location); //hack hack
+                    //mApp.setLocation(location); //hack hack
                     //Launch new activity if you got a location
                     Intent intent = new Intent(context, ModeTypeActivity.class);
                     startActivity(intent);
@@ -138,9 +142,10 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
             double longitude = mLastLocation.getLongitude();
 
             myAddress = Utility.convertLatLongToAddress(this, latitude, longitude);
+            mApp.mCurrentLocation = myAddress;
 
-            autoCompView.setText(myAddress.getDescription());
-            Toast.makeText(getApplicationContext(), Utility.locationType(myAddress.getLocationTerms()) + "", Toast.LENGTH_SHORT).show();
+            autoCompView.setText(mApp.mCurrentLocation.getDescription());
+            Toast.makeText(getApplicationContext(), Utility.locationType(mApp.mCurrentLocation.getLocationTerms()) + "", Toast.LENGTH_SHORT).show();
         } else {
             autoCompView.setText("(Couldn't get the location. Make sure location is enabled on the device)");
         }
@@ -234,6 +239,7 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
             e.printStackTrace();
         }
 
+        mApp.mCurrentLocation = myAddress;
         printOut(myAddress, str);
     }
 

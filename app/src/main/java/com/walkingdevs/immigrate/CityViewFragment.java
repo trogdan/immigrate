@@ -25,6 +25,8 @@ public class CityViewFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-
+        if(MyApp.mCurrentLocation != null && MyApp.mCurrentLocation.getCity() != null) {
+            new EndpointsAsyncTask().execute(MyApp.mCurrentLocation.getCity());
+        }
     }
 }
