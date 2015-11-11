@@ -27,6 +27,7 @@
     <string name="numbeo_api_city_prices_endpoint">city_prices?</string>
     <string name="numbeo_api_key">api_key=</string>
     <string name="numbeo_api_value">***REMOVED***</string>
+    <string name="title_activity_city_view">CityView</string>
     <string name="google_maps_key">***REMOVED***</string>
     <string name="title_activity_neighborhood">Explore Your Neighborhood</string>
 
@@ -35,5 +36,6 @@
     <string name="tab_title_education">Education</string>
     <string name="tab_title_transportation">Transportation</string>
 
+    <string name="title_activity_city_view">CityView</string>
 
 </resources>
