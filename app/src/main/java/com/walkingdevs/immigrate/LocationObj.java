@@ -11,6 +11,10 @@ public class LocationObj {
     String description;
     ArrayList<String> locationTerms = new ArrayList<String>();
 
+    String city;
+    double latitudes;
+    double longitude;
+
     public void setPlaceId(String p){
         placeId = p;
     }
@@ -52,4 +56,27 @@ public class LocationObj {
         return returnString;
     }
 
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public double getLatitudes() {
+        return latitudes;
+    }
+
+    public void setLatitudes(double latitudes) {
+        this.latitudes = latitudes;
+    }
 }

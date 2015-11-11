@@ -17,12 +17,20 @@
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <uses-sdk android:minSdkVersion="10"
+        <uses-sdk
+            android:minSdkVersion="10"
             android:targetSdkVersion="22" />
+
+        <activity
+            android:name=".CityView"
+            android:label="@string/title_activity_city_view"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

@@ -40,12 +40,17 @@ public class Utility {
         LocationObj locObj = new LocationObj();
         ArrayList<String> locationTerms = new ArrayList<String>();
 
+        locObj.setLatitudes(lat);
+        locObj.setLongitude(lon);
+
         try {
             List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
 
             if(addresses != null) {
                 Address returnedAddress = addresses.get(0);
                 StringBuilder strReturnedAddress = new StringBuilder();
+                locObj.setCity(returnedAddress.getLocality());
+
                 for(int i=0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
                     String[] commaSplit = null;
                     if(returnedAddress.getAddressLine(i).contains(",")) {

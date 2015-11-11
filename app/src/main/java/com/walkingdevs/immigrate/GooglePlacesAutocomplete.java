@@ -2,6 +2,7 @@ package com.walkingdevs.immigrate;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
@@ -70,6 +72,11 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
     AutoCompleteTextView autoCompView;
 
     ImageButton btnMyLocation;
+    Button btnGo;
+
+    public static final String CITY_STRING = "city_string";
+
+    LocationObj myAddress;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,6 +88,7 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
         autoCompView.setOnItemClickListener(this);
 
         btnMyLocation = (ImageButton) findViewById(R.id.btnMyLocation);
+        btnGo = (Button) findViewById(R.id.btnSubmitLocation);
 
         // First we need to check availability of play services
         if (checkPlayServices()) {
@@ -93,6 +101,16 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
             @Override
             public void onClick(View v) {
                 displayLocation();
+            }
+        });
+
+        btnGo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), CityView.class);
+                String message = myAddress.getCity();
+                intent.putExtra(CITY_STRING, message);
+                startActivity(intent);
             }
         });
     }
@@ -109,7 +127,7 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
             double latitude = mLastLocation.getLatitude();
             double longitude = mLastLocation.getLongitude();
 
-            LocationObj myAddress = Utility.convertLatLongToAddress(this, latitude, longitude);
+            myAddress = Utility.convertLatLongToAddress(this, latitude, longitude);
 
             autoCompView.setText(myAddress.getDescription());
             Toast.makeText(getApplicationContext(), Utility.locationType(myAddress.getLocationTerms()) + "", Toast.LENGTH_SHORT).show();
@@ -188,10 +206,10 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
         String str = (String) adapterView.getItemAtPosition(position);
 
         //Create Location Object
-        LocationObj locationObj = new LocationObj();
+        myAddress = new LocationObj();
         try {
-            locationObj.setPlaceId(selectedLocation.getJSONObject(position).getString("place_id"));
-            locationObj.setDescription(selectedLocation.getJSONObject(position).getString("description"));
+            myAddress.setPlaceId(selectedLocation.getJSONObject(position).getString("place_id"));
+            myAddress.setDescription(selectedLocation.getJSONObject(position).getString("description"));
 
             JSONArray term_items = selectedLocation.getJSONObject(position).getJSONArray("terms");
             ArrayList<String> location_terms = new ArrayList<String>();
@@ -200,13 +218,13 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
                 location_terms.add(term_items.getJSONObject(i).getString("value"));
             }
 
-            locationObj.setLocationTerms(location_terms);
+            myAddress.setLocationTerms(location_terms);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        printOut(locationObj, str);
+        printOut(myAddress, str);
     }
 
     public void printOut(LocationObj l, String str) {
