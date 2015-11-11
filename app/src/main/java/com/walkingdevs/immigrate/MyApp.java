@@ -8,13 +8,18 @@ import android.content.Context;
  */
 public class MyApp extends Application {
 
+    private static MyApp mInstance;
     private static Context context;
+    public static LocationObj mCurrentLocation;
 
-    private static LocationObj mCurrentLocation;
+    public static MyApp getInstance() {
+        return mInstance;
+    }
 
     public void onCreate(){
         super.onCreate();
         MyApp.context = getApplicationContext();
+        mInstance = this;
     }
 
     public static Context getAppContext() {
