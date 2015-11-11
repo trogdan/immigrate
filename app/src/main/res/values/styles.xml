@@ -20,10 +20,46 @@
         <item name="android:layout_marginBottom">0dp</item>
         <item name="android:textAppearance">?android:textAppearanceMedium</item>
         <item name="android:textColor">@color/colorPrimaryDark</item>
-        <item name="android:fontFamily">sans-serif-regular</item>
+        <item name="android:fontFamily">sans-serif-thin</item>
         <item name="android:paddingLeft">15dp</item>
         <item name="android:paddingRight">15dp</item>
         <item name="android:textSize">40sp</item>
+    </style>
+
+    <style name="SubTitleStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">0dp</item>
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:fontFamily">sans-serif-thin</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingRight">15dp</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="CardTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">0dp</item>
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:fontFamily">sans-serif-regular</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingRight">15dp</item>
+        <item name="android:textSize">25sp</item>
+    </style>
+
+    <style name="CardSubTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">0dp</item>
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:fontFamily">sans-serif-regular</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingRight">15dp</item>
+        <item name="android:textSize">15sp</item>
     </style>
 
 </resources>

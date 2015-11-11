@@ -2,6 +2,7 @@ package com.walkingdevs.immigrate;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
@@ -19,6 +21,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,10 +34,12 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-import static com.walkingdevs.immigrate.Utility.locationType;
-
 public class GooglePlacesAutocomplete extends Activity implements AdapterView.OnItemClickListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
+
+    public static final String MODE_SELECT_TAG = "MODE_SELECT";
+
+    Context context;
 
     // LogCat tag
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -43,6 +48,9 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
     private static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
     private static final String TYPE_AUTOCOMPLETE = "/autocomplete";
     private static final String OUT_JSON = "/json";
+
+    //Create Location Object
+    private LocationObj location = new LocationObj();
 
     //TODO: Change this to use string resource file
     private static final String API_KEY = "AIzaSyB9lhydEsTvRpKvmprdS_8aT0cTv_e72DM";
@@ -78,6 +86,20 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
 
         autoCompView.setAdapter(new GooglePlacesAutocompleteAdapter(this, R.layout.search_list_item));
         autoCompView.setOnItemClickListener(this);
+
+        context = this;
+
+        Button button = (Button) findViewById(R.id.go_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (location != null) {
+                    //Launch new activity if you got a location
+                    Intent intent = new Intent(context, ModeTypeActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
 
         btnMyLocation = (ImageButton) findViewById(R.id.btnMyLocation);
 
@@ -206,12 +228,15 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
         }
 
         printOut(locationObj, str);
+
+
     }
+
 
     public void printOut(LocationObj l, String str) {
         System.out.print(l.toString());
         Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, String.valueOf(locationType(l.getLocationTerms())), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, String.valueOf(com.walkingdevs.immigrate.Utility.locationType(l.getLocationTerms())), Toast.LENGTH_SHORT).show();
     }
 
 
@@ -270,7 +295,6 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
 
         return resultList;
     }
-
 
     class GooglePlacesAutocompleteAdapter extends ArrayAdapter implements Filterable {
         private ArrayList resultList;

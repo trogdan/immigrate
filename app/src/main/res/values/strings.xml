@@ -3,14 +3,24 @@
     <string name="action_settings">Settings</string>
 
     <!-- Titles -->
-    <string name="app_code_name">Hoodie!</string>
+    <string name="app_code_name">Hoodly</string>
+    <string name="app_subtitle">A home for everyone</string>
     <string name="go">Go</string>
 
     <!-- Tags -->
     <string name="search_prompt">Enter a location</string>
 
+    <string name="neighbourhood_title">Neighbourhood</string>
+    <string name="neighbourhood_subtitle">Explore your surroundings</string>
+    <string name="city_title">City</string>
+    <string name="city_subtitle">Assess your city</string>
+
     <!-- APIs -->
     <string name="google_places_api">***REMOVED***</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_mode_type">ModeTypeActivity</string>
 
     // Apis
     <string name="numbeo_api_request_url">http://www.numbeo.com/api</string>
@@ -25,7 +35,5 @@
     <string name="tab_title_education">Education</string>
     <string name="tab_title_transportation">Transportation</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
