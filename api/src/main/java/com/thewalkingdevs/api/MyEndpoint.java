@@ -10,6 +10,8 @@ import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
 import com.thewalkingdevs.api.data.ImmigrateDAO;
+import com.thewalkingdevs.api.model.CityBag;
+import com.thewalkingdevs.api.model.CityCrime;
 import com.thewalkingdevs.api.model.CityIndices;
 import com.thewalkingdevs.api.model.CityPrices;
 import com.thewalkingdevs.api.model.Places;
@@ -60,9 +62,25 @@ public class MyEndpoint {
             httpMethod = ApiMethod.HttpMethod.GET
     )
     public CityIndices getCityIndices(@Named("city") String city) {
-
-        city = "Boston";
         return ApiUtil.cityIndicesEndpoint(city);
+    }
+
+    @ApiMethod(
+            name = "getCityCrime",
+            path = "citycrime",
+            httpMethod = ApiMethod.HttpMethod.GET
+    )
+    public CityCrime getCityCrime(@Named("city") String city) {
+        return ApiUtil.cityCrimeEndpoint(city);
+    }
+
+    @ApiMethod(
+            name = "getCityBag",
+            path = "citybag",
+            httpMethod = ApiMethod.HttpMethod.GET
+    )
+    public CityBag getCityBag(@Named("city") String city) {
+        return ApiUtil.cityBagEndpoint(city);
     }
 
     @ApiMethod(
@@ -71,7 +89,6 @@ public class MyEndpoint {
             httpMethod = ApiMethod.HttpMethod.GET
     )
     public Places getPlaces(@Named("location") String location) {
-
         //test implementation, "location" would be passed as parameter into this method
         location = "42.4183333,-71.1066667";
         return ApiUtil.placesEndpoint(location);
