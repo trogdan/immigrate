@@ -320,12 +320,21 @@ public final class ApiUtil {
      * @return {@link CityPrices}
      */
     public static CityPrices cityPricesEndpoint(String city) {
+        CityPrices prices = null;
+
         String stem = "/" + AppConstants.NUMBEO_CITY_PRICES_ENDPOINT +
                 AppConstants.NUMBEO_API_KEY_PREFIX + AppConstants.NUMBEO_API_KEY_VALUE +
                 "&query=" + city;
 
         String json = callAPI(DAO.getRequestUrl(AppConstants.NUMBEO_QUERY_BASE, stem).toString());
-        return convert(json, CityPrices.class);
+
+        try {
+            prices = convert(json, CityPrices.class);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return prices;
     }
 
     /**
@@ -334,12 +343,21 @@ public final class ApiUtil {
      * @return {@link CityPrices}
      */
     public static CityHealthCareInfo cityHealthCareInfoEndpoint(String city) {
+        CityHealthCareInfo healthCareInfo = null;
+
         String stem = "/" + AppConstants.NUMBEO_CITY_HEALTHCARE_ENDPOINT +
                 AppConstants.NUMBEO_API_KEY_PREFIX + AppConstants.NUMBEO_API_KEY_VALUE +
                 "&query=" + city;
 
         String json = callAPI(DAO.getRequestUrl(AppConstants.NUMBEO_QUERY_BASE, stem).toString());
-        return convert(json, CityHealthCareInfo.class);
+
+        try {
+            healthCareInfo = convert(json, CityHealthCareInfo.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return healthCareInfo;
     }
 
     /**
@@ -348,12 +366,21 @@ public final class ApiUtil {
      * @return {@link CityPrices}
      */
     public static CityCrime cityCrimeEndpoint(String city) {
+        CityCrime cityCrime = null;
+
         String stem = "/" + AppConstants.NUMBEO_CITY_CRIME_ENDPOINT +
                 AppConstants.NUMBEO_API_KEY_PREFIX + AppConstants.NUMBEO_API_KEY_VALUE +
                 "&query=" + city;
 
         String json = callAPI(DAO.getRequestUrl(AppConstants.NUMBEO_QUERY_BASE, stem).toString());
-        return convert(json, CityCrime.class);
+
+        try {
+            cityCrime = convert(json, CityCrime.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return cityCrime;
     }
 
     /**
@@ -374,13 +401,15 @@ public final class ApiUtil {
     private static CityHealthCareInfoSkinny toHealthCareInfo(CityHealthCareInfo cityHealthCareInfo) {
         CityHealthCareInfoSkinny healthCareInfoSkinny = new CityHealthCareInfoSkinny();
 
-        healthCareInfoSkinny.setAccuracyIndex(cityHealthCareInfo.getAccuracyIndex());
-        healthCareInfoSkinny.setFriendlinessIndex(cityHealthCareInfo.getFriendlinessIndex());
-        healthCareInfoSkinny.setHealthCareCost(cityHealthCareInfo.getHealthCareCost());
-        healthCareInfoSkinny.setHealthCareStaffCompetency(cityHealthCareInfo.getHealthCareStaffCompetency());
-        healthCareInfoSkinny.setResponsivenessIndex(cityHealthCareInfo.getResponsivenessIndex());
-        healthCareInfoSkinny.setSpeedIndex(cityHealthCareInfo.getSpeedIndex());
-        healthCareInfoSkinny.setModernEquipmentIndex(cityHealthCareInfo.getModernEquipmentIndex());
+        if (cityHealthCareInfo != null) {
+            healthCareInfoSkinny.setAccuracyIndex(cityHealthCareInfo.getAccuracyIndex());
+            healthCareInfoSkinny.setFriendlinessIndex(cityHealthCareInfo.getFriendlinessIndex());
+            healthCareInfoSkinny.setHealthCareCost(cityHealthCareInfo.getHealthCareCost());
+            healthCareInfoSkinny.setHealthCareStaffCompetency(cityHealthCareInfo.getHealthCareStaffCompetency());
+            healthCareInfoSkinny.setResponsivenessIndex(cityHealthCareInfo.getResponsivenessIndex());
+            healthCareInfoSkinny.setSpeedIndex(cityHealthCareInfo.getSpeedIndex());
+            healthCareInfoSkinny.setModernEquipmentIndex(cityHealthCareInfo.getModernEquipmentIndex());
+        }
 
         return healthCareInfoSkinny;
     }
@@ -388,35 +417,40 @@ public final class ApiUtil {
     private static CityCrimeSkinny toCityCrime(CityCrime cityCrime) {
         CityCrimeSkinny crimeSkinny = new CityCrimeSkinny();
 
-        crimeSkinny.setCorruptionIndex(cityCrime.getCorruptionIndex());
-        crimeSkinny.setCrimeLevel(cityCrime.getCrimeLevel());
-        crimeSkinny.setViolentCrimeIndex(cityCrime.getViolentCrimeIndex());
-        crimeSkinny.setDrugCrimeIndex(cityCrime.getDrugCrimeIndex());
-        crimeSkinny.setDaylightSafetyIndex(cityCrime.getDaylightSafetyIndex());
-        crimeSkinny.setNightSafetyIndex(cityCrime.getNightSafetyIndex());
-        crimeSkinny.setDiversityThreatIndex(cityCrime.getDiversityThreatIndex());
+        if (cityCrime != null) {
+            crimeSkinny.setCorruptionIndex(cityCrime.getCorruptionIndex());
+            crimeSkinny.setCrimeLevel(cityCrime.getCrimeLevel());
+            crimeSkinny.setViolentCrimeIndex(cityCrime.getViolentCrimeIndex());
+            crimeSkinny.setDrugCrimeIndex(cityCrime.getDrugCrimeIndex());
+            crimeSkinny.setDaylightSafetyIndex(cityCrime.getDaylightSafetyIndex());
+            crimeSkinny.setNightSafetyIndex(cityCrime.getNightSafetyIndex());
+            crimeSkinny.setDiversityThreatIndex(cityCrime.getDiversityThreatIndex());
+        }
 
         return crimeSkinny;
     }
 
     private static CityPricesSkinny toCityPricesSkinny(CityPrices cityPrices) {
         CityPricesSkinny nonfat = new CityPricesSkinny();
-        nonfat.setCurrency(cityPrices.getCurrency());
 
-        List<ItemPriceSkinny> itemPricesSkinny = new ArrayList<ItemPriceSkinny>();
+        if (cityPrices != null) {
+            nonfat.setCurrency(cityPrices.getCurrency());
 
-        for (ItemPrice item : cityPrices.getPrices()) {
-            ItemPriceSkinny nonfatItem = new ItemPriceSkinny();
-            if (idOfInterest(item.getItemId())) {
-                nonfatItem.setItemName(item.getItemName());
-                nonfatItem.setLowestPrice(item.getLowestPrice());
-                nonfatItem.setItemId(item.getItemId());
-                nonfatItem.setHighestPrice(item.getHighestPrice());
-                itemPricesSkinny.add(nonfatItem);
+            List<ItemPriceSkinny> itemPricesSkinny = new ArrayList<ItemPriceSkinny>();
+
+            for (ItemPrice item : cityPrices.getPrices()) {
+                ItemPriceSkinny nonfatItem = new ItemPriceSkinny();
+                if (idOfInterest(item.getItemId())) {
+                    nonfatItem.setItemName(item.getItemName());
+                    nonfatItem.setLowestPrice(item.getLowestPrice());
+                    nonfatItem.setItemId(item.getItemId());
+                    nonfatItem.setHighestPrice(item.getHighestPrice());
+                    itemPricesSkinny.add(nonfatItem);
+                }
             }
-        }
 
-        nonfat.setPrices(itemPricesSkinny);
+            nonfat.setPrices(itemPricesSkinny);
+        }
 
         return nonfat;
     }

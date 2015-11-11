@@ -1,10 +1,12 @@
 package com.thewalkingdevs.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Data model for representing health care funding in percentages.
  */
+@JsonIgnoreProperties({"None"})
 public class HealthInsuranceSpread {
     @JsonProperty("Employer Sponsored")
     private double employerSponsoredPercentage;
