@@ -174,7 +174,7 @@ public class ModeTypeFragment extends Fragment {
             Place p2 = place.get(1);
 
             //Populate the UI
-            t1.setText("hi");
+            t1.setText(p1.getDescription());
             d1.setText("hi");
             t2.setText(p2.getDescription());
             d2.setText("hi");
