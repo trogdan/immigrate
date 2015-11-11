@@ -39,11 +39,7 @@ public class EndpointsAsyncTask extends AsyncTask<String, Void, CityBag> {
     }
 
     @Override
-    protected void onPostExecute(CityPrices cityPrices) {
-        super.onPostExecute(cityPrices);
-
-        List<ItemPrice> prices = cityPrices.getPrices();
-
-        System.out.print(prices);
+    protected void onPostExecute(CityBag cityBag) {
+        super.onPostExecute(cityBag);
     }
 }

@@ -339,9 +339,6 @@ public final class ApiUtil {
         CityPricesSkinny nonfat = new CityPricesSkinny();
         nonfat.setCurrency(cityPrices.getCurrency());
 
-        Integer[] idsOfInterest = new Integer[]{1, 9, 11, 13, 24, 26, 28};
-        List<Integer> idsList = Arrays.asList(idsOfInterest);
-
         List<ItemPriceSkinny> itemPricesSkinny = new ArrayList<ItemPriceSkinny>();
 
         for (ItemPrice item : cityPrices.getPrices()) {
