@@ -102,12 +102,12 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
                     //Launch new activity if you got a location
                     Intent intent = new Intent(context, ModeTypeActivity.class);
                     startActivity(intent);
+                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 }
             }
         });
 
         btnMyLocation = (ImageButton) findViewById(R.id.btnMyLocation);
-        btnGo = (Button) findViewById(R.id.btnSubmitLocation);
 
         // First we need to check availability of play services
         if (checkPlayServices()) {
@@ -120,16 +120,6 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
             @Override
             public void onClick(View v) {
                 displayLocation();
-            }
-        });
-
-        btnGo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), CityView.class);
-                String message = myAddress.getCity();
-                intent.putExtra(CITY_STRING, message);
-                startActivity(intent);
             }
         });
     }
