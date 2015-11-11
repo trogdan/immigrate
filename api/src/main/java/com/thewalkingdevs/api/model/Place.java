@@ -3,7 +3,7 @@ package com.thewalkingdevs.api.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonIgnoreProperties({"place_id", "reference", "scope", "types",
+@JsonIgnoreProperties({"id", "reference", "scope", "types",
         "vicinity", "rating", "opening_hours", "photos", "permanently_closed", "price_level"})
 public class Place {
 
@@ -11,8 +11,8 @@ public class Place {
     private Geometry geometry = null;
     @JsonProperty("name")
     private String name = null;
-    @JsonProperty("id")
-    private String id = null;
+    @JsonProperty("place_id")
+    private String placeId = null;
     @JsonProperty("icon")
     private String icon = null;
 
@@ -36,12 +36,12 @@ public class Place {
         this.name = name;
     }
 
-    public String getId() {
-        return id;
+    public String getPlaceId() {
+        return placeId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setPlaceId(String placeId) {
+        this.placeId = placeId;
     }
 
     public String getIcon() {

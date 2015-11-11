@@ -15,9 +15,12 @@ import android.widget.TextView;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.thewalkingdevs.api.myApi.MyApi;
+import com.thewalkingdevs.api.myApi.model.CityBag;
+import com.thewalkingdevs.api.myApi.model.ItemPriceSkinny;
 import com.thewalkingdevs.api.myApi.model.Place;
 import com.thewalkingdevs.api.myApi.model.Places;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 
@@ -30,59 +33,72 @@ import java.util.List;
 public class ModeTypeFragment extends Fragment {
 
     //TextView variables
-    private TextView t1;
-    private TextView d1;
-    private TextView t2;
-    private TextView d2;
+    private TextView neighbourhoodPreviewText;
+    private TextView cityPreviewText;
+    private Boolean cityPreviewUpdated = false;
+    private Boolean neighbourhoodPreviewUpdated = false;
 
     private LocationObj currentLocation;
-    private PlacesEndpointAsyncTask placesEndpointAsyncTask;
 
     private OnFragmentInteractionListener mListener;
-
 
     public ModeTypeFragment() {
         // Required empty public constructor
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void updateNeighbourhoodPreview(Place place){
 
-        //Define text view
-//        t1 = (TextView) getActivity().findViewById(R.id.neighbourhoodTitle);
-//        d1 = (TextView) getActivity().findViewById(R.id.neighbourhoodDesc);
-//        t2 = (TextView) getActivity().findViewById(R.id.neighbourhoodTitle2);
-//        d2 = (TextView) getActivity().findViewById(R.id.neighbourhoodDesc2);
+        if (place != null){
 
+            float distFrom = place.getDistFrom();
+            DecimalFormat df = new DecimalFormat();
+            df.setMaximumFractionDigits(2);
+            String formattedDistance = df.format(distFrom);
 
-        String coordinates = "42.4183333,-71.1066667";
+            String previewText = "Nearest " + place.getName() + " is "
+                    + formattedDistance + " miles away.";
 
+            if (neighbourhoodPreviewText != null){
+                neighbourhoodPreviewUpdated = true;
+                neighbourhoodPreviewText.setText(previewText);
+            }
 
+        }
+    }
+
+    public void updateCityPreview(ItemPriceSkinny itemPriceSkinny){
+        if (itemPriceSkinny != null){
+            Integer highPrice = itemPriceSkinny.getHighestPrice();
+            Integer lowPrice = itemPriceSkinny.getLowestPrice();
+            String previewText = "One bedroom apartment downtown costs between $" + lowPrice
+                    + " and $" + highPrice + ".";
+
+            if (cityPreviewText != null){
+
+                cityPreviewUpdated = true;
+                cityPreviewText.setText(previewText);
+            }
+
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
         View rootView = inflater.inflate(R.layout.fragment_mode_type, container, false);
+        neighbourhoodPreviewText = (TextView) rootView.findViewById(R.id.neighbourhood_preview);
+        cityPreviewText = (TextView) rootView.findViewById(R.id.city_preview);
 
         currentLocation = MyApp.getInstance().getLocation();
 
-        placesEndpointAsyncTask = new PlacesEndpointAsyncTask();
-
-        if(currentLocation != null){
-            //placesEndpointAsyncTask.execute(currentLocation.getLatitudes() + "," + currentLocation.getLongitude());
+        if(currentLocation != null && (!neighbourhoodPreviewUpdated && !cityPreviewUpdated)) {
+            String location = currentLocation.getLatitudes() + "," + currentLocation.getLongitude();
+            new PlacesEndpointAsyncTask().execute(location);
+            new Endpoints2AsyncTask().execute(location);
         }
 
-        //Define text view
-//        t1 = (TextView) rootView.findViewById(R.id.neighbourhoodTitle);
-//        d1 = (TextView) rootView.findViewById(R.id.neighbourhoodDesc);
-//        t2 = (TextView) rootView.findViewById(R.id.neighbourhoodTitle2);
-//        d2 = (TextView) rootView.findViewById(R.id.neighbourhoodDesc2);
-
-        // TODO populate cards and pull from numbeo
+        // TODO: populate cards and pull from numbeo
         LocationObj currentLocation = MyApp.getInstance().getLocation();
 
         CardView cityCard = (CardView) rootView.findViewById(R.id.mode_card_city);
@@ -168,18 +184,49 @@ public class ModeTypeFragment extends Fragment {
 
         @Override
         public void onPostExecute(Places p){
-
-            List<Place> place = p.getResults();
-            Place p1 = place.get(0);
-            Place p2 = place.get(1);
-
-            //Populate the UI
-            t1.setText(p1.getDescription());
-            d1.setText("hi");
-            t2.setText(p2.getDescription());
-            d2.setText("hi");
+            List<Place> placesResults = p.getResults();
+            if (placesResults != null && !placesResults.isEmpty()) {
+                Place firstPlace = placesResults.get(0);
+                ModeTypeFragment.this.updateNeighbourhoodPreview(firstPlace);
+            }
         }
 
+    }
+
+    public class Endpoints2AsyncTask extends AsyncTask<String, Void, CityBag> {
+
+        private MyApi myApiService = null;
+        private final String LOG_TAG = Endpoints2AsyncTask.class.getSimpleName();
+
+        @Override
+        protected CityBag doInBackground(String... params) {
+
+            // core doInBackground code from https://github.com/GoogleCloudPlatform/gradle-appengine-templates/tree/master/HelloEndpoints
+            if(myApiService == null) {
+                MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                        .setRootUrl("https://brilliant-brand-112216.appspot.com/_ah/api/");
+                myApiService = builder.build();
+            }
+
+            // Get the city info
+            String city = params[0];
+
+            try {
+                return myApiService.getCityBag(city).execute();
+            } catch (Exception e) {}//IOException e) {
+            // return e.getMessage();*/
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(CityBag cityBag) {
+            super.onPostExecute(cityBag);
+
+            List<ItemPriceSkinny> priceList = cityBag.getCityPrices().getPrices();
+            if (!priceList.isEmpty() && priceList.size() > 4)
+             ModeTypeFragment.this.updateCityPreview(priceList.get(5));
+
+        }
     }
 
 }

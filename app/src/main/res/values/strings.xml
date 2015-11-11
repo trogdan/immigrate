@@ -20,6 +20,7 @@
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_mode_type">ModeTypeActivity</string>
 
     // Apis
     <string name="numbeo_api_request_url">http://www.numbeo.com/api</string>
@@ -41,4 +42,6 @@
     <string name="normalize_value_excellent">Excellent</string>
 
     <string name="title_activity_mode_type">Choose Your Path</string>
+    <string name="title_activity_compare">CompareActivity</string>
+
 </resources>

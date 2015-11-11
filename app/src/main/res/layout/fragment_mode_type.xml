@@ -11,6 +11,7 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/mode_card_neighborhood"
+        android:elevation="4dp"
         android:layout_width="fill_parent"
         android:layout_height="240dp"
         android:layout_gravity="center_horizontal"
@@ -55,6 +56,19 @@
                 android:paddingBottom="10dp"
                 style="@style/CardSubTextStyle"/>
 
+            <TextView
+                android:layout_marginTop="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/neighbourhood_preview"
+                android:gravity="top"
+                android:paddingLeft="10dp"
+                android:paddingBottom="10dp"
+                style="@style/CardSubTextStyleDark"/>
+
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
@@ -76,6 +90,18 @@
             android:layout_alignParentTop="true"
             android:scaleType="centerCrop"
             android:src="@drawable/city_img" />
+        <TextView
+            android:layout_marginTop="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:gravity="top"
+            android:id="@+id/city_preview"
+            android:paddingLeft="10dp"
+            android:paddingBottom="25dp"
+            style="@style/CardTextStyle"/>
         <TextView
             android:text="@string/city_title"
             android:layout_marginTop="0dp"

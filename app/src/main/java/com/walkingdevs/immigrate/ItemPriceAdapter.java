@@ -33,13 +33,22 @@ public class ItemPriceAdapter extends ArrayAdapter<ItemPriceSkinny> {
             views.priceName = (TextView)convertView.findViewById(R.id.item_price_name);
             views.priceMin = (TextView)convertView.findViewById(R.id.item_price_min);
             views.priceMax = (TextView)convertView.findViewById(R.id.item_price_max);
+            views.priceBetween = (TextView)convertView.findViewById(R.id.item_price_between);
             convertView.setTag(views);
         } else {
             views = (ViewHolder)convertView.getTag();
         }
         views.priceName.setText(price.getItemName());
-        views.priceMin.setText("$" + price.getLowestPrice() + "");
-        views.priceMax.setText("$" + price.getHighestPrice() + "");
+        if (price.getLowestPrice() == price.getHighestPrice()){
+
+            views.priceMin.setText("");
+            views.priceBetween.setText("$" + price.getLowestPrice());
+            views.priceMax.setText("");
+        } else {
+            views.priceMin.setText("$" + price.getLowestPrice() + "");
+            views.priceBetween.setText(" - ");
+            views.priceMax.setText("$" + price.getHighestPrice() + "");
+        }
 
         // Return the completed view to render on screen
         return convertView;
@@ -49,5 +58,6 @@ public class ItemPriceAdapter extends ArrayAdapter<ItemPriceSkinny> {
         public TextView priceName;
         public TextView priceMax;
         public TextView priceMin;
+        public TextView priceBetween;
     }
 }

@@ -37,7 +37,7 @@ public class ModeTypeActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        overridePendingTransition(android.R.anim.slide_out_right, android.R.anim.slide_in_left);
     }
 
 }
