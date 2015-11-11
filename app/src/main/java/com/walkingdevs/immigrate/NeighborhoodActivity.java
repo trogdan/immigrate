@@ -35,7 +35,7 @@ public class NeighborhoodActivity extends AppCompatActivity implements OnMapRead
      */
     private PagerAdapter mPagerAdapter;
 
-    private List<Location> mCurrentLocations;
+    private List<LocationObj> mCurrentLocations;
 
 
     private static String[] mPageTitles;
