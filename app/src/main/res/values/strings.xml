@@ -34,14 +34,11 @@
     <string name="tab_title_services">Services</string>
     <string name="tab_title_education">Education</string>
     <string name="tab_title_transportation">Transportation</string>
-<<<<<<< HEAD
 
     <string name="normalize_value_poor">Poor</string>
     <string name="normalize_value_good">Good</string>
     <string name="normalize_value_very_good">Very Good</string>
     <string name="normalize_value_excellent">Excellent</string>
-||||||| merged common ancestors
-=======
     <string name="title_activity_compare">CompareActivity</string>
->>>>>>> starter code for compare activity
+
 </resources>
