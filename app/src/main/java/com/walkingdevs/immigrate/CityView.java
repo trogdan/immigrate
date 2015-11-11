@@ -49,4 +49,5 @@ public class CityView extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

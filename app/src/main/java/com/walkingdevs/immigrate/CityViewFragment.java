@@ -81,9 +81,19 @@ public class CityViewFragment extends Fragment {
 
             List<ItemPriceSkinny> priceList = cityBag.getCityPrices().getPrices();
 
+            List<ItemPriceSkinny> cleanedPriceList = new ArrayList<ItemPriceSkinny>();
+            for (ItemPriceSkinny price : priceList){
+                // in an ideal world this would be written in a more obvious way
+                if (price.getHighestPrice() == 0 && price.getLowestPrice() == 0){
+                    //nothing
+                } else {
+                    cleanedPriceList.add(price);
+                }
+            }
+
             mPricesAdapter.clear();
-            for (int i = 0; i < priceList.size(); i++) {
-                mPricesAdapter.add(priceList.get(i));
+            for (int i = 0; i < cleanedPriceList.size(); i++) {
+                mPricesAdapter.add(cleanedPriceList.get(i));
             }
         }
     }

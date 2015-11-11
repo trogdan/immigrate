@@ -62,4 +62,16 @@
         <item name="android:textSize">15sp</item>
     </style>
 
+    <style name="CardSubTextStyleDark">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">0dp</item>
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+        <item name="android:textColor">@color/colorGreen</item>
+        <item name="android:fontFamily">sans-serif-regular</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingRight">15dp</item>
+        <item name="android:textSize">25sp</item>
+    </style>
+
 </resources>
