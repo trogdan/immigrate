@@ -40,8 +40,6 @@ public class EndpointsAsyncTask extends AsyncTask<String, Void, CityBag> {
     @Override
     protected void onPostExecute(CityBag cityBag) {
         super.onPostExecute(cityBag);
-
-        String test = cityBag.getCityCrime().getCrimeLevel().toString();
-        String tes2 = "test";
+        
     }
 }
