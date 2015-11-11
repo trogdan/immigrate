@@ -60,25 +60,21 @@ public class MyEndpoint {
             httpMethod = ApiMethod.HttpMethod.GET
     )
     public CityIndices getCityIndices(@Named("city") String city) {
+
+        city = "Boston";
         return ApiUtil.cityIndicesEndpoint(city);
     }
 
-    @ApiMethod(name = "getPlaces")
-    public Places getPlaces() {
+    @ApiMethod(
+            name = "getPlaces",
+            path = "location",
+            httpMethod = ApiMethod.HttpMethod.GET
+    )
+    public Places getPlaces(@Named("location") String location) {
 
         //test implementation, "location" would be passed as parameter into this method
-        String location = "42.4183333,-71.1066667";
-
-        ImmigrateDAO immigrateDAO = new ImmigrateDAO();
-        String apiResponse = immigrateDAO.getPlaces(location);
-
-        //log response
-        LOG.info(apiResponse);
-
-        Places myPlaces = new Places();
-        myPlaces.setData(apiResponse);
-
-        return myPlaces;
+        location = "42.4183333,-71.1066667";
+        return ApiUtil.placesEndpoint(location);
     }
 
 }
