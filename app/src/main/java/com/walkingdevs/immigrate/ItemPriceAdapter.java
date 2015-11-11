@@ -33,6 +33,9 @@ public class ItemPriceAdapter extends ArrayAdapter<ItemPriceSkinny> {
             views.priceName = (TextView)convertView.findViewById(R.id.item_price_name);
             views.priceMin = (TextView)convertView.findViewById(R.id.item_price_min);
             views.priceMax = (TextView)convertView.findViewById(R.id.item_price_max);
+            convertView.setTag(views);
+        } else {
+            views = (ViewHolder)convertView.getTag();
         }
         views.priceName.setText(price.getItemName());
         views.priceMin.setText("$" + price.getLowestPrice() + "");

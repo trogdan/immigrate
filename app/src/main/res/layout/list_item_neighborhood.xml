@@ -3,8 +3,6 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:padding="6dip" >
-
-
     <LinearLayout
         android:id="@+id/item_layout"
         android:orientation="horizontal"
@@ -29,13 +27,11 @@
             android:id="@+id/item_place_distance_text"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="false" />
-
     </LinearLayout>
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/item_layout"
+        android:layout_below="@id/item_layout"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Small Text"
         android:id="@+id/item_place_description_text"
