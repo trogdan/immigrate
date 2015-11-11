@@ -52,7 +52,7 @@ public class NeighborhoodSliderFragment extends Fragment {
         mListView = (ListView) rootView.findViewById(R.id.sliderListView);
         mListView.setAdapter(mPlacesAdapter);
 
-        mCurrentLocation = MyApp.getLocation();
+        mCurrentLocation = MyApp.getInstance().getLocation();
         mPlacesTask = new PlacesAsyncTask();
         mPlacesTask.execute(mCurrentLocation.getLatitudes() + "," + mCurrentLocation.getLongitude());
 
