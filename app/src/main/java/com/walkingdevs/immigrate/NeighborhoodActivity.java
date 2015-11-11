@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -21,6 +22,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.thewalkingdevs.api.myApi.MyApi;
+import com.thewalkingdevs.api.myApi.model.Place;
+import com.thewalkingdevs.api.myApi.model.Places;
 import com.thewalkingdevs.api.myApi.model.PlacesBag;
 
 import java.util.ArrayList;
@@ -46,6 +49,8 @@ public class NeighborhoodActivity extends AppCompatActivity implements OnMapRead
     private PagerAdapter mPagerAdapter;
 
     private static String[] mPageTitles;
+
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +83,22 @@ public class NeighborhoodActivity extends AppCompatActivity implements OnMapRead
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
         mPager.setOffscreenPageLimit(NUM_PAGES);
+        mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                updateMap();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         mPlacesTask = new PlacesAsyncTask();
         mPlacesTask.execute(mCurrentLocation.getLatitudes() + "," + mCurrentLocation.getLongitude());
 
@@ -114,9 +134,43 @@ public class NeighborhoodActivity extends AppCompatActivity implements OnMapRead
      */
     @Override
     public void onMapReady(GoogleMap map) {
-        map.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        mMap = map;
+
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                new LatLng(mCurrentLocation.getLatitudes(), mCurrentLocation.getLongitude()),
+                10));
+        map.setMyLocationEnabled(true);
+        updateMap();
     }
 
+    public void updateMap()
+    {
+        if (mLatestPlaces != null)
+        {
+            int item = mPager.getCurrentItem();
+            Places places = null;
+            if (item == 0) {
+                places = mLatestPlaces.getServices();
+            } else if (item == 1) {
+                places = mLatestPlaces.getEssentials();
+            } else if (item == 2) {
+                places = mLatestPlaces.getTransportation();
+            }
+
+            if (places != null)
+            {
+                mMap.clear();
+                for(int i = 0; i < places.getResults().size(); i++)
+                {
+                    Place place = places.getResults().get(i);
+
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(
+                            place.getGeometry().getLocation().getLat(),
+                            place.getGeometry().getLocation().getLng())).title(place.getName()));
+                }
+            }
+        }
+    }
     /**
      * A simple pager adapter that represents 3 ScreenSlidePageFragment objects, in
      * sequence.
@@ -186,11 +240,11 @@ public class NeighborhoodActivity extends AppCompatActivity implements OnMapRead
         }
 
         @Override
-        protected void onPostExecute(PlacesBag places) {
-            super.onPostExecute(places);
+        protected void onPostExecute(PlacesBag placeBag) {
+            super.onPostExecute(placeBag);
 
-            if(places != null) {
-                mLatestPlaces = places;
+            if(placeBag != null) {
+                mLatestPlaces = placeBag;
                 for(int i = 0; i < NUM_PAGES; i++)
                 {
                     if (i == 0) {
@@ -202,8 +256,8 @@ public class NeighborhoodActivity extends AppCompatActivity implements OnMapRead
                     }
                 }
 
+                updateMap();
             }
-
         }
     }
 }
