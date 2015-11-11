@@ -110,6 +110,10 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
                     //mApp.setLocation(location); //hack hack
                     //Launch new activity if you got a location
                     Intent intent = new Intent(context, ModeTypeActivity.class);
+
+                    //Gather micro data
+
+
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 }
