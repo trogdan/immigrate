@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties({"place_id", "reference", "scope", "types",
-        "vicinity", "rating", "opening_hours", "photos", "permanently_closed"})
+        "vicinity", "rating", "opening_hours", "photos", "permanently_closed", "price_level"})
 public class Place {
 
     @JsonProperty("geometry")
@@ -15,6 +15,8 @@ public class Place {
     private String id = null;
     @JsonProperty("icon")
     private String icon = null;
+
+    private float distFrom;
 
     private String description = null;
 
@@ -56,5 +58,13 @@ public class Place {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public float getDistFrom() {
+        return distFrom;
+    }
+
+    public void setDistFrom(float distFrom) {
+        this.distFrom = distFrom;
     }
 }

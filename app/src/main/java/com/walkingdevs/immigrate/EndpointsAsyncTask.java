@@ -7,6 +7,8 @@ import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.thewalkingdevs.api.myApi.MyApi;
 import com.thewalkingdevs.api.myApi.model.CityBag;
 
+
+
 /**
  * Async Task for Endpoints.
  */
