@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,8 +64,9 @@ public class NeighborhoodSliderFragment extends Fragment {
             String location = params[0];
             try {
                 return myApiService.getPlaces(location).execute();
-            } catch (Exception e) {}//IOException e) {
-            // return e.getMessage();*/
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "Error getting api service places");
+            }
             return null;
         }
 

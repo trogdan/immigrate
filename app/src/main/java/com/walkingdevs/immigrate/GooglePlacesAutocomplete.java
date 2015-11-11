@@ -99,6 +99,7 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
             @Override
             public void onClick(View v) {
                 if (location != null) {
+                    MyApp.setLocation(location); //hack hack
                     //Launch new activity if you got a location
                     Intent intent = new Intent(context, ModeTypeActivity.class);
                     startActivity(intent);

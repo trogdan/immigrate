@@ -48,11 +48,6 @@
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
 
-        <activity
-            android:name=".CityView"
-            android:label="@string/title_activity_city_view"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
     </application>
 
 </manifest>

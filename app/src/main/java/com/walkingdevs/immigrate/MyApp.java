@@ -10,6 +10,8 @@ public class MyApp extends Application {
 
     private static Context context;
 
+    private static LocationObj mCurrentLocation;
+
     public void onCreate(){
         super.onCreate();
         MyApp.context = getApplicationContext();
@@ -18,4 +20,10 @@ public class MyApp extends Application {
     public static Context getAppContext() {
         return MyApp.context;
     }
+
+    public static void setLocation(LocationObj currentLocation) {
+        mCurrentLocation = currentLocation;
+    }
+
+    public static LocationObj getLocation() { return mCurrentLocation; }
 }
