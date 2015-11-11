@@ -457,6 +457,6 @@ public final class ApiUtil {
 
     private static boolean idOfInterest(int itemId) {
         return itemId == 1 || itemId == 9 || itemId == 11 || itemId == 13 || itemId == 24 ||
-                itemId == 26 || itemId == 28;
+                itemId == 26 || itemId == 28 || itemId == 30;
     }
 }
