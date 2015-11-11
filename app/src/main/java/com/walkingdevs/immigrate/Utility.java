@@ -1,8 +1,15 @@
 package com.walkingdevs.immigrate;
 
+import android.app.Activity;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
+
+import com.google.api.client.util.Lists;
+import com.thewalkingdevs.api.myApi.model.CityCrime;
+import com.thewalkingdevs.api.myApi.model.CityCrimeSkinny;
+import com.thewalkingdevs.api.myApi.model.CityHealthCareInfo;
+import com.thewalkingdevs.api.myApi.model.CityHealthCareInfoSkinny;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -85,4 +92,101 @@ public class Utility {
 
         return locObj;
     }
+
+    /**
+     * Returns appropriate strings for healthcare info in the order:
+     *      1. accuracy
+     *      2. responsiveness
+     *      3. friendliness
+     *      4. healthcare cost
+     *      5. competency
+     *      6. speed
+     *      7. mordern equipment
+     *
+     * @param context the context to use
+     * @param info the info to use
+     * @return a list of representative strings
+     */
+    public static List<String> normalizeCityHealthCareInfo(Activity context, CityHealthCareInfoSkinny info) {
+        // First get the leading index
+        List<Double> values = new ArrayList<Double>();
+
+        values.add(info.getAccuracyIndex());
+        values.add(info.getResponsivenessIndex());
+        values.add(info.getFriendlinessIndex());
+        values.add(info.getHealthCareCost());
+        values.add(info.getHealthCareStaffCompetency());
+        values.add(info.getSpeedIndex());
+        values.add(Double.valueOf(String.valueOf(info.getModernEquipmentIndex())));
+
+        Double leadingIndex = findLeadingIndex(values);
+
+        return normalizeValues(context, values, leadingIndex);
+    }
+
+    /**
+     * Returns appropriate strings for healthcare info in the order:
+     *      1. corruption index
+     *      2. crime level
+     *      3. daylight safety index
+     *      4. night safety index
+     *      5. drug crime index
+     *      6. diversity threat index
+     *      7. violent crime index
+     *
+     * @param context the context to use
+     * @param cityCrimeInfo the info to use
+     * @return a list of representative strings
+     */
+    public static List<String> normalizeCityCrime(Activity context, CityCrimeSkinny cityCrimeInfo) {
+        List<Double> values = new ArrayList<Double>();
+
+        values.add(cityCrimeInfo.getCorruptionIndex());
+        values.add(cityCrimeInfo.getCrimeLevel());
+        values.add(cityCrimeInfo.getDaylightSafetyIndex());
+        values.add(cityCrimeInfo.getNightSafetyIndex());
+        values.add(cityCrimeInfo.getDrugCrimeIndex());
+        values.add(cityCrimeInfo.getDiversityThreatIndex());
+        values.add(cityCrimeInfo.getViolentCrimeIndex());
+
+        Double leadingIndex = findLeadingIndex(values);
+
+        return normalizeValues(context, values, leadingIndex);
+    }
+
+    private static List<String> normalizeValues(Activity context, List<Double> values, Double leadingIndex) {
+        List<String> strs = new ArrayList<String>();
+
+        for (Double value : values) {
+            double index = value / leadingIndex * 100.00;
+            strs.add(normalize(context, index));
+        }
+
+        return strs;
+    }
+
+    private static double findLeadingIndex(List<Double> values) {
+        Double max = null;
+
+        for(Double d : values) {
+            if (d.doubleValue() > max) {
+                max = d.doubleValue();
+            }
+        }
+
+        return max;
+    }
+
+    private static String normalize(Activity context, double value) {
+        if (value <= 0.0) {
+            return context.getString(R.string.normalize_value_poor);
+        } else if (value > 25.00 && value <= 50.00) {
+            return context.getString(R.string.normalize_value_good);
+        } else if (value > 50.00 && value <= 75.00) {
+            return context.getString(R.string.normalize_value_very_good);
+        }
+
+        return context.getString(R.string.normalize_value_excellent);
+    }
+
 }
