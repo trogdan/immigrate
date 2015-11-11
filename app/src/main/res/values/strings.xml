@@ -36,5 +36,6 @@
     <string name="tab_title_education">Education</string>
     <string name="tab_title_transportation">Transportation</string>
 
+    <string name="title_activity_city_view">CityView</string>
 
 </resources>
