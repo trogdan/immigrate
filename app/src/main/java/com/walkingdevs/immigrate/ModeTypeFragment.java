@@ -50,10 +50,10 @@ public class ModeTypeFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         //Define text view
-        t1 = (TextView) getActivity().findViewById(R.id.neighbourhoodTitle);
-        d1 = (TextView) getActivity().findViewById(R.id.neighbourhoodDesc);
-        t2 = (TextView) getActivity().findViewById(R.id.neighbourhoodTitle2);
-        d2 = (TextView) getActivity().findViewById(R.id.neighbourhoodDesc2);
+//        t1 = (TextView) getActivity().findViewById(R.id.neighbourhoodTitle);
+//        d1 = (TextView) getActivity().findViewById(R.id.neighbourhoodDesc);
+//        t2 = (TextView) getActivity().findViewById(R.id.neighbourhoodTitle2);
+//        d2 = (TextView) getActivity().findViewById(R.id.neighbourhoodDesc2);
 
 
         String coordinates = "42.4183333,-71.1066667";
@@ -73,14 +73,14 @@ public class ModeTypeFragment extends Fragment {
         placesEndpointAsyncTask = new PlacesEndpointAsyncTask();
 
         if(currentLocation != null){
-            placesEndpointAsyncTask.execute(currentLocation.getLatitudes() + "," + currentLocation.getLongitude());
+            //placesEndpointAsyncTask.execute(currentLocation.getLatitudes() + "," + currentLocation.getLongitude());
         }
 
         //Define text view
-        t1 = (TextView) rootView.findViewById(R.id.neighbourhoodTitle);
-        d1 = (TextView) rootView.findViewById(R.id.neighbourhoodDesc);
-        t2 = (TextView) rootView.findViewById(R.id.neighbourhoodTitle2);
-        d2 = (TextView) rootView.findViewById(R.id.neighbourhoodDesc2);
+//        t1 = (TextView) rootView.findViewById(R.id.neighbourhoodTitle);
+//        d1 = (TextView) rootView.findViewById(R.id.neighbourhoodDesc);
+//        t2 = (TextView) rootView.findViewById(R.id.neighbourhoodTitle2);
+//        d2 = (TextView) rootView.findViewById(R.id.neighbourhoodDesc2);
 
         // TODO populate cards and pull from numbeo
         LocationObj currentLocation = MyApp.getInstance().getLocation();
