@@ -3,8 +3,6 @@ package com.walkingdevs.immigrate;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,29 +37,29 @@ public class CityViewFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_city_view, container, false);
-        compareInput = (EditText) rootView.findViewById(R.id.compareinput);
-
-        compareInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //no need
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //no need
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // if we're going to have a scan button, I'd like to stay consistent
-                // and provide an add button, this way request is only made to the server
-                // once the user presses submit
-
-                if (s.length() > 0)
-                    ((CityView)getActivity()).updateInput(s.toString());
-            }
-        });
+//        compareInput = (EditText) rootView.findViewById(R.id.compareinput);
+//
+//        compareInput.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//                //no need
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                //no need
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                // if we're going to have a scan button, I'd like to stay consistent
+//                // and provide an add button, this way request is only made to the server
+//                // once the user presses submit
+//
+//                if (s.length() > 0)
+//                    ((CityView)getActivity()).updateInput(s.toString());
+//            }
+//        });
 
         mPricesAdapter = new ItemPriceAdapter(getActivity(), new ArrayList<ItemPriceSkinny>());
         mListView = (ListView) rootView.findViewById(R.id.listview);
