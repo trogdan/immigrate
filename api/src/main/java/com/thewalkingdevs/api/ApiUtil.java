@@ -124,6 +124,31 @@ public final class ApiUtil {
         return "&" + key + "=" + value;
     }
 
+    private static List<Place> getEssentials(String location){
+
+        StringBuilder sb = getPlacesQueryBase(location);
+        sb.append(getQueryParam("types", "department_store%7Cgrocery_or_supermarket"));
+
+        String transportationJson = callAPI(DAO.getRequestUrl(AppConstants.PLACES_QUERY_BASE, sb.toString()).toString());
+        Places transportationContainer = convert(transportationJson, Places.class);
+        List<Place> transportationResults = transportationContainer.getResults();
+        List<Place> transportationResultsSubList = transportationResults.subList(0,5);
+        return transportationResultsSubList;
+    }
+
+    private static List<Place> getTransportation(String location){
+
+        StringBuilder sb = getPlacesQueryBase(location);
+        sb.append(getQueryParam("types", "bus_station%7Csubway_station%7Ctrain_station%7Cairport"));
+
+        String essentialsJson = callAPI(DAO.getRequestUrl(AppConstants.PLACES_QUERY_BASE, sb.toString()).toString());
+        Places essentialsContainer = convert(essentialsJson, Places.class);
+        List<Place> essientialsResults = essentialsContainer.getResults();
+
+        List<Place> essientialsResultsSubList = essientialsResults.subList(0,5);
+        return essientialsResultsSubList;
+    }
+
     private static List<Place> getPostOffices(String location){
 
         StringBuilder sb = getPlacesQueryBase(location);
@@ -179,15 +204,41 @@ public final class ApiUtil {
         return immigrationOfficeQueryStem;
     }
 
+    private static void setPlacesDistance(List<Place> places, String location){
+        for (Place place : places){
+            float distFrom = AppUtils.getPlaceDistance(place, location);
+            place.setDistFrom(distFrom);
+        }
+    }
+
+    public static Places placesEndpointEssentials(String location){
+
+        Places essentialsContainer = new Places();
+        List<Place> essentialsPlaces = getEssentials(location);
+        setPlacesDistance(essentialsPlaces, location);
+
+        essentialsContainer.setResults(essentialsPlaces);
+        return essentialsContainer;
+    }
+
+    public static Places placesEndpointTransportation(String location){
+
+        Places transportationContainer = new Places();
+        List<Place> transportationPlaces = getTransportation(location);
+        setPlacesDistance(transportationPlaces, location);
+
+        transportationContainer.setResults(transportationPlaces);
+        return transportationContainer;
+    }
+
     /**
-     * Returns the city indices data from numbeo.
      * @param location the city to use
      * @return {@link CityIndices}
      */
-    public static Places placesEndpoint(String location) {
+    public static Places placesEndpointServices(String location) {
 
-        Places essentials = new Places();
-        List<Place> essentialPlaces = new ArrayList<>();
+        Places services = new Places();
+        List<Place> servicesPlaces = new ArrayList<>();
 
         List<Place> immigrationOfficePlaces = getImmigrationOffices(location);
         List<Place> socialSecurityPlaces = getSocialSecurityOffices(location);
@@ -197,33 +248,46 @@ public final class ApiUtil {
         if (!immigrationOfficePlaces.isEmpty()){
             // get closest immigration office
             Place immigrationOffice = immigrationOfficePlaces.get(0);
+            // set description
             immigrationOffice.setDescription("Get your permanent resident card, or citizenship");
-            essentialPlaces.add(immigrationOffice);
+            // set distance
+            float distFrom = AppUtils.getPlaceDistance(immigrationOffice, location);
+            immigrationOffice.setDistFrom(distFrom);
+
+            servicesPlaces.add(immigrationOffice);
         }
 
         if (!socialSecurityPlaces.isEmpty()){
             // get closest social security office
             Place socialSecurityOffice = socialSecurityPlaces.get(0);
             socialSecurityOffice.setDescription("Get your ability to work in the USA");
-            essentialPlaces.add(socialSecurityOffice);
+            // set distance
+            float distFrom = AppUtils.getPlaceDistance(socialSecurityOffice, location);
+            socialSecurityOffice.setDistFrom(distFrom);
+            servicesPlaces.add(socialSecurityOffice);
         }
 
         if (!deptMotoVehiclesPlaces.isEmpty()){
             // get closest social dept of motor vehicles
             Place deptMotoVehicles = deptMotoVehiclesPlaces.get(0);
             deptMotoVehicles.setDescription("Get your license or state id");
-            essentialPlaces.add(deptMotoVehicles);
+            // set distance
+            float distFrom = AppUtils.getPlaceDistance(deptMotoVehicles, location);
+            deptMotoVehicles.setDistFrom(distFrom);
+            servicesPlaces.add(deptMotoVehicles);
         }
 
         if (!postOfficesPlaces.isEmpty()){
             // get closest post office
             Place postOffice = postOfficesPlaces.get(0);
             postOffice.setDescription("Send and receive letters");
-            essentialPlaces.add(postOffice);
+            float distFrom = AppUtils.getPlaceDistance(postOffice, location);
+            postOffice.setDistFrom(distFrom);
+            servicesPlaces.add(postOffice);
         }
 
-        essentials.setResults(essentialPlaces);
-        return essentials;
+        services.setResults(servicesPlaces);
+        return services;
     }
 
     /**

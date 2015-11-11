@@ -13,6 +13,7 @@ import com.thewalkingdevs.api.data.ImmigrateDAO;
 import com.thewalkingdevs.api.model.CityIndices;
 import com.thewalkingdevs.api.model.CityPrices;
 import com.thewalkingdevs.api.model.Places;
+import com.thewalkingdevs.api.model.PlacesBag;
 
 import java.util.logging.Logger;
 
@@ -66,15 +67,33 @@ public class MyEndpoint {
     }
 
     @ApiMethod(
+            name = "getPlacesBag",
+            path = "placesbag",
+            httpMethod = ApiMethod.HttpMethod.GET
+    )
+    public PlacesBag getPlacesBag(@Named("location") String location) {
+
+        Places services =  ApiUtil.placesEndpointServices(location);
+        Places transportation = ApiUtil.placesEndpointTransportation(location);
+        Places essentials = ApiUtil.placesEndpointEssentials(location);
+
+        PlacesBag placesBag = new PlacesBag();
+        placesBag.setEssentials(essentials);
+        placesBag.setServices(services);
+        placesBag.setTransportation(transportation);
+
+        return placesBag;
+    }
+
+    @ApiMethod(
             name = "getPlaces",
-            path = "location",
+            path = "places",
             httpMethod = ApiMethod.HttpMethod.GET
     )
     public Places getPlaces(@Named("location") String location) {
 
-        //test implementation, "location" would be passed as parameter into this method
-        location = "42.4183333,-71.1066667";
-        return ApiUtil.placesEndpoint(location);
+        Places essentials = ApiUtil.placesEndpointServices(location);
+        return essentials;
     }
 
 }

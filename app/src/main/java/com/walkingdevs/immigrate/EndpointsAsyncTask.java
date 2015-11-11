@@ -37,4 +37,5 @@ public class EndpointsAsyncTask extends AsyncTask<String, Void, CityPrices> {
         return null;
     }
 
+
 }
