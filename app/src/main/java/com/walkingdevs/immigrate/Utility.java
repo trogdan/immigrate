@@ -80,6 +80,8 @@ public class Utility {
 
         locObj.setDescription(myAddress);
         locObj.setLocationTerms(locationTerms);
+        MyApp myApp = MyApp.getInstance();
+        myApp.mCurrentLocation = locObj;
 
         return locObj;
     }
