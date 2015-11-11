@@ -410,7 +410,7 @@ public final class ApiUtil {
             healthCareInfoSkinny.setSpeedIndex(cityHealthCareInfo.getSpeedIndex());
             healthCareInfoSkinny.setModernEquipmentIndex(cityHealthCareInfo.getModernEquipmentIndex());
         }
-        
+
         return healthCareInfoSkinny;
     }
 
