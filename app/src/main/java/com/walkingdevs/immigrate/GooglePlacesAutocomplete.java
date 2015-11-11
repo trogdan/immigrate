@@ -108,7 +108,7 @@ public class GooglePlacesAutocomplete extends Activity implements AdapterView.On
         });
 
         btnMyLocation = (ImageButton) findViewById(R.id.btnMyLocation);
-
+        
         // First we need to check availability of play services
         if (checkPlayServices()) {
             // Building the GoogleApi client
