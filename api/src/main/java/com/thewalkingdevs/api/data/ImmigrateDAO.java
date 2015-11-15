@@ -88,7 +88,7 @@ public class ImmigrateDAO {
         requestUrl.append(getQueryParam(AppConstants.PLACES_QUERY_LOCATION, location));
 
         //following string is for test implemtation purposes, will be updated
-        requestUrl.append("&radius=500&types=food&key=***REMOVED***");
+        requestUrl.append("&radius=500&types=food&key=");
 
         String response = getAPIResponse(requestUrl.toString());
         return response;

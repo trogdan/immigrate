@@ -20,6 +20,6 @@ public class AppConstants {
     public static final String NUMBEO_CITY_CRIME_ENDPOINT = "city_crime?";
     public static final String NUMBEO_INDICES_ENDPOINT = "indices?";
     public static final String NUMBEO_API_KEY_PREFIX = "api_key=";
-    public static final String NUMBEO_API_KEY_VALUE = "***REMOVED***";
+    public static final String NUMBEO_API_KEY_VALUE = "";
 
 }
