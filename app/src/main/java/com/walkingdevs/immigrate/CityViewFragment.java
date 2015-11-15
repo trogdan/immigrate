@@ -1,5 +1,6 @@
 package com.walkingdevs.immigrate;
 
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,8 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.thewalkingdevs.api.myApi.MyApi;
 import com.thewalkingdevs.api.myApi.model.CityBag;
+import com.thewalkingdevs.api.myApi.model.CityPrices;
+import com.thewalkingdevs.api.myApi.model.CityPricesSkinny;
 import com.thewalkingdevs.api.myApi.model.ItemPriceSkinny;
 
 import java.util.ArrayList;
@@ -72,8 +75,11 @@ public class CityViewFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        LocationObj currentLocation = MyApp.getInstance().getLocation();
+
         if(MyApp.mCurrentLocation != null && MyApp.mCurrentLocation.getCity() != null) {
-            new Endpoints2AsyncTask().execute(MyApp.mCurrentLocation.getCity());
+            String location = currentLocation.getLatitudes() + "," + currentLocation.getLongitude();
+            new Endpoints2AsyncTask().execute(location);
         }
     }
 
@@ -106,21 +112,27 @@ public class CityViewFragment extends Fragment {
         protected void onPostExecute(CityBag cityBag) {
             super.onPostExecute(cityBag);
 
-            List<ItemPriceSkinny> priceList = cityBag.getCityPrices().getPrices();
+            if(cityBag != null) {
 
-            List<ItemPriceSkinny> cleanedPriceList = new ArrayList<ItemPriceSkinny>();
-            for (ItemPriceSkinny price : priceList){
-                // in an ideal world this would be written in a more obvious way
-                if (price.getHighestPrice() == 0 && price.getLowestPrice() == 0){
-                    //nothing
-                } else {
-                    cleanedPriceList.add(price);
+                CityPricesSkinny prices = cityBag.getCityPrices();
+                if(prices != null) {
+                    List<ItemPriceSkinny> priceList = prices.getPrices();
+
+                    List<ItemPriceSkinny> cleanedPriceList = new ArrayList<ItemPriceSkinny>();
+                    for (ItemPriceSkinny price : priceList){
+                        // in an ideal world this would be written in a more obvious way
+                        if (price.getHighestPrice() == 0 && price.getLowestPrice() == 0){
+                            //nothing
+                        } else {
+                            cleanedPriceList.add(price);
+                        }
+                    }
+
+                    mPricesAdapter.clear();
+                    for (int i = 0; i < cleanedPriceList.size(); i++) {
+                        mPricesAdapter.add(cleanedPriceList.get(i));
+                    }
                 }
-            }
-
-            mPricesAdapter.clear();
-            for (int i = 0; i < cleanedPriceList.size(); i++) {
-                mPricesAdapter.add(cleanedPriceList.get(i));
             }
         }
     }
